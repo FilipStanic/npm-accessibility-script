@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+.env
+*.log
+npm-debug.log*
+
+# Output files
+*.fixed.html
+
+# CLI test outputs
+test-pages/*_fixed.html
