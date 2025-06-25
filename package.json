@@ -1,19 +1,16 @@
 {
-  "name": "nas",
+  "name": "npm-accessibility-script",
   "version": "1.0.0",
-  "description": "Simple accessibility checker/fixer",
-  "main": "index.js",
   "type": "module",
   "bin": {
     "nas": "./bin/nas.mjs"
   },
-  "scripts": {
-    "start": "node index.js"
-  },
   "dependencies": {
-    "chalk": "^5.3.0",
+    "@babel/parser": "^7.23.5",
+    "@babel/traverse": "^7.23.5",
+    "chalk": "^4.1.2",
     "cheerio": "^1.0.0-rc.12",
     "fs-extra": "^11.1.1",
-    "inquirer": "^9.2.7"
+    "inquirer": "^9.2.16"
   }
 }

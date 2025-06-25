@@ -12,3 +12,5 @@ npm-debug.log*
 
 # CLI test outputs
 test-pages/*_fixed.html
+
+fixes.txt

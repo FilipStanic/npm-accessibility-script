@@ -3,39 +3,21 @@ const path = require('path');
 const cheerio = require('cheerio');
 const chalk = require('chalk');
 
-const args = process.argv.slice(2); 
+const args = process.argv.slice(2);
 const fileArg = args.find(arg => arg.endsWith('.html'));
 const modeArg = args.find(arg => arg.includes('--mode='));
 const mode = modeArg?.split('=')[1] === 'suggest' ? 'suggest' : 'fix';
 
-console.log(chalk.gray(`Debug: args = ${JSON.stringify(args)}`));
-console.log(chalk.gray(`Debug: fileArg = ${fileArg}`));
-console.log(chalk.gray(`Debug: modeArg = ${modeArg}`));
-console.log(chalk.gray(`Debug: mode = ${mode}`));
-
 if (!fileArg) {
   console.error(chalk.red('❌ Please specify an HTML file to process'));
-  console.log(chalk.yellow('Usage: npm start -- filename.html [--mode=suggest|fix]'));
   process.exit(1);
 }
 
 const inputPath = path.join(__dirname, 'test-pages', fileArg);
 const inputFileName = path.basename(inputPath, '.html');
-
-let outputPath;
-if (mode === 'fix') {
-  outputPath = path.join(__dirname, 'test-pages', `${inputFileName}_fixed.html`);
-} else {
-  outputPath = inputPath;
-}
-
-if (mode === 'suggest') {
-  console.log(
-    chalk.magenta(
-      `\n💬 SUGGEST MODE ENABLED — writing suggestions directly into: ${fileArg}\n`
-    )
-  );
-}
+const outputPath = mode === 'fix'
+  ? path.join(__dirname, 'test-pages', `${inputFileName}_fixed.html`)
+  : inputPath;
 
 fs.readFile(inputPath, 'utf-8', (err, html) => {
   if (err) {

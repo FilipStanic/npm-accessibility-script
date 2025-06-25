@@ -1,42 +1,61 @@
 #!/usr/bin/env node
 
 import inquirer from 'inquirer';
-import { exec } from 'child_process';
-import { readdirSync } from 'fs';
 import path from 'path';
+import { exec } from 'child_process';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const walkFiles = (dir, extList = ['.html', '.jsx'], fileList = []) => {
+  const files = fs.readdirSync(dir);
+  for (const file of files) {
+    const fullPath = path.join(dir, file);
+    const stat = fs.statSync(fullPath);
+    if (stat.isDirectory()) {
+      walkFiles(fullPath, extList, fileList);
+    } else if (extList.includes(path.extname(fullPath))) {
+      fileList.push(path.relative(process.cwd(), fullPath));
+    }
+  }
+  return fileList;
+};
 
+const availableFiles = walkFiles(process.cwd());
 
-const testPagesPath = path.join(__dirname, '..', 'test-pages');
-const htmlFiles = readdirSync(testPagesPath).filter(file => file.endsWith('.html'));
+if (availableFiles.length === 0) {
+  console.log('❌ No .html or .jsx files found in the current folder or subfolders.');
+  process.exit(1);
+}
 
-
-const answers = await inquirer.prompt([
+const { file, mode } = await inquirer.prompt([
   {
     type: 'list',
     name: 'file',
-    message: 'Which HTML file do you want to analyze?',
-    choices: htmlFiles
+    message: '📄 Which file do you want to analyze?',
+    choices: availableFiles,
   },
   {
     type: 'list',
     name: 'mode',
-    message: 'Choose a mode:',
-    choices: ['fix', 'suggest']
+    message: '🛠 Choose a mode:',
+    choices: ['fix', 'suggest'],
   }
 ]);
 
+const ext = path.extname(file);
+const command = ext === '.jsx'
+  ? `node jsxProcessor.cjs "${file}"`
+  : `node index.cjs "${file}" --mode=${mode}`;
 
-const command = `node index.cjs ${answers.file} --mode=${answers.mode}`;
 console.log(`\n🔧 Running: ${command}\n`);
 
 exec(command, (err, stdout, stderr) => {
   if (err) {
-    console.error('❌ Error:', stderr);
-  } else {
-    console.log(stdout);
+    console.error('❌ Error:', err.message);
+    return;
   }
+  if (stderr) {
+    console.error(stderr);
+  }
+  console.log(stdout);
 });
