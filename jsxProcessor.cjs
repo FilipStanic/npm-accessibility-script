@@ -31,14 +31,17 @@ fs.readFile(fullPath, "utf8", (err, data) => {
 
     if (/<img\b[^>]*>/.test(line) && !/alt\s*=/.test(line)) {
       const srcMatch = line.match(/src\s*=\s*{?"([^"}]+)"/);
-      const fallback = srcMatch?.[1]?.split("/").pop()?.split(".")[0] || "image";
+      const src = srcMatch?.[1] || "";
+      const fallback = src.split("/").pop()?.split(".")[0] || "image";
+
+      const imgTag = src ? `<img src="${src}">` : "<img>";
 
       if (mode === "fix") {
         line = line.replace(/<img\b/, `<img alt="${fallback}"`);
-        console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img>`));
+        console.log(chalk.green(`✔️ Fixed alt="${fallback}" on ${imgTag}`));
       } else {
         suggestionsToInsert.push(`// Suggestion: Add alt="${fallback}" to the image element below`);
-        console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img>`));
+        console.log(chalk.blue(`💡 Suggest alt="${fallback}" for ${imgTag}`));
       }
 
       suggestions++;
