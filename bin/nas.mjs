@@ -44,7 +44,7 @@ const { file, mode } = await inquirer.prompt([
 
 const ext = path.extname(file);
 const command = ext === '.jsx'
-  ? `node jsxProcessor.cjs "${file}"`
+  ? `node jsxProcessor.cjs "${file}" --${mode}`
   : `node index.cjs "${file}" --mode=${mode}`;
 
 console.log(`\n🔧 Running: ${command}\n`);

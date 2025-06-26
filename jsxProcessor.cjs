@@ -1,53 +1,89 @@
-const fs = require('fs');
-const path = require('path');
-const parser = require('@babel/parser');
-const traverse = require('@babel/traverse').default;
-const chalk = require('chalk');
+#!/usr/bin/env node
 
-const inputFile = process.argv[2];
-if (!inputFile) {
-  console.error(chalk.red('❌ Please provide a .jsx file.'));
+const fs = require("fs");
+const path = require("path");
+const chalk = require("chalk");
+
+const fileArg = process.argv[2];
+const mode = process.argv[3]?.includes("fix") ? "fix" : "suggest";
+
+if (!fileArg || !fileArg.endsWith(".jsx")) {
+  console.error(chalk.red("❌ Please specify a JSX file"));
   process.exit(1);
 }
 
-const inputPath = path.resolve(process.cwd(), inputFile);
-fs.readFile(inputPath, 'utf8', (err, code) => {
+const fullPath = path.resolve(process.cwd(), fileArg);
+
+fs.readFile(fullPath, "utf8", (err, data) => {
   if (err) {
-    console.error(chalk.red('❌ Failed to read file'), err);
+    console.error(chalk.red("❌ Failed to read file:"), err);
     return;
   }
 
+  const lines = data.split("\n");
+  const updatedLines = [];
   let suggestions = 0;
-  const ast = parser.parse(code, {
-    sourceType: 'module',
-    plugins: ['jsx']
-  });
 
-  traverse(ast, {
-    JSXOpeningElement(path) {
-      const name = path.node.name.name;
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+    const suggestionsToInsert = [];
 
-      if (name === 'img') {
-        const hasAlt = path.node.attributes.some(attr => attr.name?.name === 'alt');
-        if (!hasAlt) {
-          const suggestion = `// 💡 Suggestion: <img> is missing alt text\n`;
-          code = suggestion + code;
-          suggestions++;
-        }
+
+    if (/<img\b[^>]*>/.test(line) && !/alt\s*=/.test(line)) {
+      const srcMatch = line.match(/src\s*=\s*{?"([^"}]+)"/);
+      const fallback = srcMatch?.[1]?.split("/").pop()?.split(".")[0] || "image";
+
+      if (mode === "fix") {
+        line = line.replace(/<img\b/, `<img alt="${fallback}"`);
+        console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img>`));
+      } else {
+        suggestionsToInsert.push(`// Suggestion: Add alt="${fallback}" to the image element below`);
+        console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img>`));
       }
 
-      if (name === 'input') {
-        const hasAria = path.node.attributes.some(attr => attr.name?.name === 'aria-label');
-        if (!hasAria) {
-          const suggestion = `// 💡 Suggestion: <input> is missing aria-label\n`;
-          code = suggestion + code;
-          suggestions++;
-        }
-      }
+      suggestions++;
     }
-  });
 
-  const outputPath = inputPath.replace(/\.jsx$/, '_suggested.jsx');
-  fs.writeFileSync(outputPath, code, 'utf8');
-  console.log(chalk.green(`💬 ${suggestions} suggestion(s) written to ${path.basename(outputPath)}\n`));
+
+    if (/<input\b[^>]*>/.test(line) && !/aria-label\s*=/.test(line)) {
+      if (mode === "fix") {
+        line = line.replace(/<input\b/, `<input aria-label="Input field"`);
+        console.log(chalk.green(`✔️ Added aria-label to <input>`));
+      } else {
+        suggestionsToInsert.push(`// Suggestion: Add aria-label="Input field" to the input element below`);
+        console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
+      }
+
+      suggestions++;
+    }
+
+    if (mode === "suggest" && suggestionsToInsert.length > 0) {
+      updatedLines.push(...suggestionsToInsert);
+    }
+
+    updatedLines.push(line);
+  }
+
+  if (mode === "fix") {
+    const outputPath = fullPath.replace(/\.jsx$/, "_fixed.jsx");
+    fs.writeFile(outputPath, updatedLines.join("\n"), (err) => {
+      if (err) {
+        console.error(chalk.red("❌ Error writing output file:"), err);
+      } else {
+        console.log(
+          chalk.yellow(`✅ ${suggestions} issue(s) fixed.\nOutput: ${path.basename(outputPath)}\n`)
+        );
+      }
+    });
+  } else {
+    fs.writeFile(fullPath, updatedLines.join("\n"), (err) => {
+      if (err) {
+        console.error(chalk.red("❌ Error writing suggestions:"), err);
+      } else {
+        console.log(
+          chalk.yellow(`💬 ${suggestions} suggestion(s) inserted directly into ${fileArg}\n`)
+        );
+      }
+    });
+  }
 });

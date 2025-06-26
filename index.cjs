@@ -13,7 +13,7 @@ if (!fileArg) {
   process.exit(1);
 }
 
-const inputPath = path.join(__dirname, 'test-pages', fileArg);
+const inputPath = path.resolve(process.cwd(), fileArg);
 const inputFileName = path.basename(inputPath, '.html');
 const outputPath = mode === 'fix'
   ? path.join(__dirname, 'test-pages', `${inputFileName}_fixed.html`)
