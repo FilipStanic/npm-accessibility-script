@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const args = process.argv.slice(2);
 const fileArg = args.find(arg => arg.endsWith('.html'));
 const modeArg = args.find(arg => arg.includes('--mode='));
+const isQuiet = args.includes('--quiet');
 const mode = modeArg?.split('=')[1] === 'suggest' ? 'suggest' : 'fix';
 
 if (!fileArg) {
@@ -13,10 +14,10 @@ if (!fileArg) {
   process.exit(1);
 }
 
-const inputPath = path.resolve(process.cwd(), fileArg);
+const inputPath = path.join(process.cwd(), fileArg);
 const inputFileName = path.basename(inputPath, '.html');
 const outputPath = mode === 'fix'
-  ? path.join(__dirname, 'test-pages', `${inputFileName}_fixed.html`)
+  ? inputPath.replace('.html', '_fixed.html')
   : inputPath;
 
 fs.readFile(inputPath, 'utf-8', (err, html) => {
@@ -28,7 +29,7 @@ fs.readFile(inputPath, 'utf-8', (err, html) => {
   const $ = cheerio.load(html, { decodeEntities: false });
   let fixes = 0;
 
-  $('img').each((i, el) => {
+  $('img').each((_, el) => {
     const img = $(el);
     const alt = img.attr('alt');
     const src = img.attr('src') || '';
@@ -37,16 +38,16 @@ fs.readFile(inputPath, 'utf-8', (err, html) => {
     if (!alt || alt.trim() === '') {
       if (mode === 'fix') {
         img.attr('alt', fallback);
-        console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${src}">`));
+        if (!isQuiet) console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${src}">`));
       } else {
-        img.before(`<!-- Suggestion: Add alt="${fallback}" to this image -->\n      `);
-        console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img src="${src}">`));
+        img.before(`<!-- Suggestion: Add alt="${fallback}" to this image -->`);
+        if (!isQuiet) console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img src="${src}">`));
       }
       fixes++;
     }
   });
 
-  $('input').each((i, el) => {
+  $('input').each((_, el) => {
     const input = $(el);
     const hasLabel = input.attr('aria-label');
     const id = input.attr('id');
@@ -55,10 +56,10 @@ fs.readFile(inputPath, 'utf-8', (err, html) => {
     if (!hasLabel && !hasLabelTag) {
       if (mode === 'fix') {
         input.attr('aria-label', 'Input field');
-        console.log(chalk.green(`✔️ Added aria-label="Input field" to <input>`));
+        if (!isQuiet) console.log(chalk.green(`✔️ Added aria-label="Input field" to <input>`));
       } else {
-        input.before(`<!-- Suggestion: Add aria-label="Input field" to this input -->\n      `);
-        console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
+        input.before(`<!-- Suggestion: Add aria-label="Input field" to this input -->`);
+        if (!isQuiet) console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
       }
       fixes++;
     }
@@ -70,7 +71,7 @@ fs.readFile(inputPath, 'utf-8', (err, html) => {
     } else {
       const status =
         mode === 'fix'
-          ? `✅ ${fixes} issue(s) fixed.\nOutput: ${inputFileName}_fixed.html`
+          ? `✅ ${fixes} issue(s) fixed.\nOutput: ${outputPath}`
           : `💬 ${fixes} suggestion(s) inserted directly into ${fileArg}`;
       console.log(chalk.yellow(`\n${status}\n`));
     }

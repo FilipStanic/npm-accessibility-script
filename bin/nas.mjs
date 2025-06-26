@@ -4,7 +4,6 @@ import inquirer from 'inquirer';
 import path from 'path';
 import { exec } from 'child_process';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
 
 const walkFiles = (dir, extList = ['.html', '.jsx'], fileList = []) => {
   const files = fs.readdirSync(dir);
@@ -27,7 +26,7 @@ if (availableFiles.length === 0) {
   process.exit(1);
 }
 
-const { file, mode } = await inquirer.prompt([
+const { file, mode, quiet } = await inquirer.prompt([
   {
     type: 'list',
     name: 'file',
@@ -39,13 +38,20 @@ const { file, mode } = await inquirer.prompt([
     name: 'mode',
     message: '🛠 Choose a mode:',
     choices: ['fix', 'suggest'],
+  },
+  {
+    type: 'confirm',
+    name: 'quiet',
+    message: '🤫 Suppress per-element logs?',
+    default: false,
   }
 ]);
 
 const ext = path.extname(file);
+const quietFlag = quiet ? '--quiet' : '';
 const command = ext === '.jsx'
-  ? `node jsxProcessor.cjs "${file}" --${mode}`
-  : `node index.cjs "${file}" --mode=${mode}`;
+  ? `node jsxProcessor.cjs "${file}" ${mode} ${quietFlag}`
+  : `node index.cjs "${file}" --mode=${mode} ${quietFlag}`;
 
 console.log(`\n🔧 Running: ${command}\n`);
 
