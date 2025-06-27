@@ -1,20 +1,43 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
+const { exec } = require('child_process');
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1000,
-    height: 700,
+    width: 800,
+    height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'renderer.js'),
-      nodeIntegration: true,
-      contextIsolation: false,
-    }
+      preload: path.join(__dirname, 'preload.js'),
+    },
   });
-
   win.loadFile(path.join(__dirname, 'index.html'));
+  console.log('✅ Electron app started');
 }
 
-app.whenReady().then(() => {
-  createWindow();
+app.whenReady().then(createWindow);
+
+ipcMain.handle('open-file-dialog', async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({ properties: ['openFile'] });
+  return canceled ? null : filePaths[0];
+});
+
+ipcMain.handle('run-script', async (event, { file, mode }) => {
+  return new Promise((resolve, reject) => {
+    const ext = path.extname(file);
+    const command = ext === '.jsx'
+      ? `node jsxProcessor.cjs "${file}"`
+      : `node index.cjs "${file}" --mode=${mode}`;
+
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        resolve(`❌ Error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        resolve(`⚠️ STDERR: ${stderr}`);
+        return;
+      }
+      resolve(stdout);
+    });
+  });
 });

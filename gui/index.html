@@ -1,19 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>NAS GUI</title>
+  <meta charset="UTF-8" />
+  <title>NAS Accessibility GUI</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      background-color: #f8fafc;
+      color: #333;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background-color: #1e40af;
+    }
+    #selectedFileName {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    #outputBox {
+      white-space: pre-wrap;
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 1rem;
+      border-radius: 0.375rem;
+      margin-top: 1rem;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+    .mode-select {
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
-  <h1>Accessibility Fixer</h1>
-  <button id="select-file">Select File</button>
-  <div id="file-path"></div>
-  <select id="mode">
-    <option value="suggest">Suggest</option>
-    <option value="fix">Fix</option>
-  </select>
-  <button id="run-script">Run</button>
-  <pre id="output"></pre>
+  <header>
+    <h1>NAS Accessibility Script GUI</h1>
+    <p>Use this tool to run your accessibility script on any HTML or JSX file.</p>
+  </header>
 
-  <script src="renderer.js"></script>
+  <section>
+    <h2>Step 1: Select a File</h2>
+    <button id="selectFileBtn">📂 Choose File</button>
+    <p id="selectedFileName">No file selected yet.</p>
+  </section>
+
+  <section class="mode-select">
+    <h2>Step 2: Select Mode</h2>
+    <label>
+      <input type="radio" name="mode" value="fix" checked> Fix
+    </label>
+    <label style="margin-left: 20px;">
+      <input type="radio" name="mode" value="suggest"> Suggest
+    </label>
+  </section>
+
+  <section>
+    <h2>Step 3: Run</h2>
+    <button id="runBtn" disabled>🚀 Run Script</button>
+    <div id="outputBox">Output will appear here...</div>
+  </section>
+
+  <script src="render.js"></script>
 </body>
 </html>
