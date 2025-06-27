@@ -4,14 +4,13 @@ const { exec } = require('child_process');
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
+    width: 1000,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
   win.loadFile(path.join(__dirname, 'index.html'));
-  console.log('✅ Electron app started');
 }
 
 app.whenReady().then(createWindow);
@@ -22,7 +21,7 @@ ipcMain.handle('open-file-dialog', async () => {
 });
 
 ipcMain.handle('run-script', async (event, { file, mode }) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const ext = path.extname(file);
     const command = ext === '.jsx'
       ? `node jsxProcessor.cjs "${file}"`

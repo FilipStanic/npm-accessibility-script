@@ -10,10 +10,6 @@
       background-color: #f8fafc;
       color: #333;
     }
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
     button {
       background-color: #2563eb;
       color: white;
@@ -41,25 +37,17 @@
       overflow-y: auto;
       font-family: monospace;
     }
-    .mode-select {
-      margin-top: 1rem;
-    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>NAS Accessibility Script GUI</h1>
-    <p>Use this tool to run your accessibility script on any HTML or JSX file.</p>
-  </header>
+  <h1>NAS Accessibility Script GUI</h1>
 
   <section>
-    <h2>Step 1: Select a File</h2>
     <button id="selectFileBtn">📂 Choose File</button>
     <p id="selectedFileName">No file selected yet.</p>
   </section>
 
-  <section class="mode-select">
-    <h2>Step 2: Select Mode</h2>
+  <section style="margin-top: 1rem;">
     <label>
       <input type="radio" name="mode" value="fix" checked> Fix
     </label>
@@ -68,8 +56,7 @@
     </label>
   </section>
 
-  <section>
-    <h2>Step 3: Run</h2>
+  <section style="margin-top: 1rem;">
     <button id="runBtn" disabled>🚀 Run Script</button>
     <div id="outputBox">Output will appear here...</div>
   </section>
