@@ -8,7 +8,9 @@ const outputBox = document.getElementById('outputBox');
 let selectedFilePath = '';
 
 selectFileBtn.addEventListener('click', async () => {
+  console.log('[Renderer] 📂 Select File button clicked');
   const result = await ipcRenderer.invoke('open-file-dialog');
+  console.log('[Renderer] 📂 open-file-dialog result:', result);
   if (result) {
     selectedFilePath = result;
     const fileName = result.split(/[/\\]/).pop();
@@ -17,7 +19,9 @@ selectFileBtn.addEventListener('click', async () => {
   }
 });
 
+
 runBtn.addEventListener('click', async () => {
+  console.log('[Renderer] 🚀 Run button clicked');
   if (!selectedFilePath) {
     alert('Please select a file first.');
     return;
@@ -25,5 +29,6 @@ runBtn.addEventListener('click', async () => {
   const selectedMode = document.querySelector('input[name="mode"]:checked').value;
   outputBox.textContent = 'Running script...';
   const result = await ipcRenderer.invoke('run-script', { file: selectedFilePath, mode: selectedMode });
+  console.log('[Renderer] 🚀 run-script result:', result);
   outputBox.textContent = result || 'No output from script.';
 });

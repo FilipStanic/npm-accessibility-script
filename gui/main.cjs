@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const path = require('path');
 const { exec } = require('child_process');
+const path = require('path');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -20,12 +20,15 @@ ipcMain.handle('open-file-dialog', async () => {
   return canceled ? null : filePaths[0];
 });
 
+
 ipcMain.handle('run-script', async (event, { file, mode }) => {
   return new Promise((resolve) => {
-    const ext = path.extname(file);
+    const relativeFile = path.relative(process.cwd(), file);
+
+    const ext = path.extname(relativeFile);
     const command = ext === '.jsx'
-      ? `node jsxProcessor.cjs "${file}"`
-      : `node index.cjs "${file}" --mode=${mode}`;
+      ? `node jsxProcessor.cjs "${relativeFile}" ${mode}`
+      : `node index.cjs "${relativeFile}" --mode=${mode}`;
 
     exec(command, (error, stdout, stderr) => {
       if (error) {
@@ -40,3 +43,4 @@ ipcMain.handle('run-script', async (event, { file, mode }) => {
     });
   });
 });
+
