@@ -6,7 +6,6 @@ const chalk = require("chalk");
 
 const fileArg = process.argv[2];
 const mode = process.argv[3]?.includes("fix") ? "fix" : "suggest";
-const isQuiet = process.argv.includes('--quiet');
 
 if (!fileArg || !fileArg.endsWith(".jsx")) {
   console.error(chalk.red("❌ Please specify a JSX file"));
@@ -26,19 +25,17 @@ fs.readFile(fullPath, "utf8", (err, data) => {
 
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
-    const suggestionsToInsert = [];
 
     if (/<img\b[^>]*>/.test(line) && !/alt\s*=/.test(line)) {
       const srcMatch = line.match(/src\s*=\s*{?"([^"}]+)"/);
-      const src = srcMatch?.[1] || 'unknown';
-      const fallback = src.split("/").pop()?.split(".")[0] || "image";
+      const fallback = srcMatch?.[1]?.split("/").pop()?.split(".")[0] || "image";
 
       if (mode === "fix") {
         line = line.replace(/<img\b/, `<img alt="${fallback}"`);
-        if (!isQuiet) console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${src}">`));
+        console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${srcMatch?.[1] || ''}">`));
       } else {
-        suggestionsToInsert.push(`// Suggestion: Add alt="${fallback}" to the image element below`);
-        if (!isQuiet) console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img src="${src}">`));
+        updatedLines.push(`{/* Suggestion: Add alt="${fallback}" to <img src="${srcMatch?.[1] || ''}"> */}`);
+        console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img src="${srcMatch?.[1] || ''}">`));
       }
       suggestions++;
     }
@@ -46,37 +43,30 @@ fs.readFile(fullPath, "utf8", (err, data) => {
     if (/<input\b[^>]*>/.test(line) && !/aria-label\s*=/.test(line)) {
       if (mode === "fix") {
         line = line.replace(/<input\b/, `<input aria-label="Input field"`);
-        if (!isQuiet) console.log(chalk.green(`✔️ Added aria-label="Input field" to <input>`));
+        console.log(chalk.green(`✔️ Added aria-label to <input>`));
       } else {
-        suggestionsToInsert.push(`// Suggestion: Add aria-label="Input field" to the input element below`);
-        if (!isQuiet) console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
+        updatedLines.push(`{/* Suggestion: Add aria-label="Input field" to this input */}`);
+        console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
       }
       suggestions++;
-    }
-
-    if (mode === "suggest" && suggestionsToInsert.length > 0) {
-      updatedLines.push(...suggestionsToInsert);
     }
 
     updatedLines.push(line);
   }
 
-  if (mode === "fix") {
-    const outputFile = fullPath.replace(/\.jsx$/, "_fixed.jsx");
-    fs.writeFile(outputFile, updatedLines.join("\n"), (err) => {
-      if (err) {
-        console.error(chalk.red("❌ Error writing output file:"), err);
-      } else {
-        console.log(chalk.yellow(`✅ ${suggestions} issue(s) fixed.\nOutput: ${outputFile}`));
-      }
-    });
-  } else {
-    fs.writeFile(fullPath, updatedLines.join("\n"), (err) => {
-      if (err) {
-        console.error(chalk.red("❌ Error writing suggestions into JSX file:"), err);
-      } else {
-        console.log(chalk.yellow(`💬 ${suggestions} suggestion(s) inserted directly into ${fileArg}\n`));
-      }
-    });
-  }
+  const outputFile = mode === "fix"
+    ? fullPath.replace(/\.jsx$/, "_fixed.jsx")
+    : fullPath;
+
+  fs.writeFile(outputFile, updatedLines.join("\n"), (err) => {
+    if (err) {
+      console.error(chalk.red("❌ Error writing output file:"), err);
+    } else {
+      const status =
+        mode === "fix"
+          ? `✅ ${suggestions} issue(s) fixed.\nOutput: ${path.basename(outputFile)}`
+          : `💬 ${suggestions} suggestion(s) inserted directly into ${path.basename(outputFile)}`;
+      console.log(chalk.yellow(`\n${status}\n`));
+    }
+  });
 });

@@ -1,6 +1,6 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld('electronAPI', {
+contextBridge.exposeInMainWorld("electronAPI", {
   openFileDialog: () => ipcRenderer.invoke('open-file-dialog'),
-  runScript: (params) => ipcRenderer.invoke('run-script', params),
+  runScript: (data) => ipcRenderer.invoke('run-script', data),
 });
