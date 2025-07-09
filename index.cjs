@@ -16,7 +16,7 @@ if (!fileArg) {
 const inputPath = path.join(__dirname, fileArg);
 const inputFileName = path.basename(inputPath, '.html');
 const outputPath = mode === 'fix'
-  ? path.join(__dirname, `${inputFileName}_fixed.html`)
+  ? path.join(path.dirname(inputPath), `${inputFileName}_fixed.html`)
   : inputPath;
 
 fs.readFile(inputPath, 'utf-8', (err, html) => {

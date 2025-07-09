@@ -54,9 +54,9 @@ fs.readFile(fullPath, "utf8", (err, data) => {
     updatedLines.push(line);
   }
 
-  const outputFile = mode === "fix"
-    ? fullPath.replace(/\.jsx$/, "_fixed.jsx")
-    : fullPath;
+const outputFile = mode === "fix"
+  ? path.join(path.dirname(fullPath), path.basename(fullPath).replace(/\.jsx$/, "_fixed.jsx"))
+  : fullPath;
 
   fs.writeFile(outputFile, updatedLines.join("\n"), (err) => {
     if (err) {
