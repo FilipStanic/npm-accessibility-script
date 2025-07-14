@@ -9,10 +9,13 @@
     "gui": "electron ./gui/main.cjs"
   },
   "dependencies": {
-    "@babel/parser": "^7.23.5",
-    "@babel/traverse": "^7.23.5",
+    "@babel/core": "^7.28.0",
+    "@babel/generator": "^7.28.0",
+    "@babel/parser": "^7.28.0",
+    "@babel/traverse": "^7.28.0",
     "chalk": "^4.1.2",
     "cheerio": "^1.0.0-rc.12",
+    "diff": "^8.0.2",
     "fs-extra": "^11.1.1",
     "inquirer": "^9.2.16"
   },

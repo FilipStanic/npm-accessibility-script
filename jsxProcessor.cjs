@@ -1,72 +1,127 @@
-#!/usr/bin/env node
+const fs = require('fs-extra');
+const path = require('path');
+const babel = require('@babel/core');
+const parser = require('@babel/parser');
+const traverse = require('@babel/traverse').default;
+const generate = require('@babel/generator').default;
+const chalk = require('chalk');
 
-const fs = require("fs");
-const path = require("path");
-const chalk = require("chalk");
+const file = process.argv[2];
+const mode = process.argv[3];
+const quiet = process.argv.includes('--quiet');
+const inputPath = path.join(process.cwd(), file);
+const fileBase = path.basename(file);
+const backupDir = path.join(process.cwd(), 'backup');
+const backupPath = path.join(backupDir, `${fileBase}.bak`);
 
-const fileArg = process.argv[2];
-const mode = process.argv[3]?.includes("fix") ? "fix" : "suggest";
+fs.ensureDirSync(backupDir);
 
-if (!fileArg || !fileArg.endsWith(".jsx")) {
-  console.error(chalk.red("❌ Please specify a JSX file"));
-  process.exit(1);
+if (mode !== 'undo' && !fs.existsSync(backupPath)) {
+  fs.copyFileSync(inputPath, backupPath);
 }
 
-const fullPath = path.join(process.cwd(), fileArg);
-fs.readFile(fullPath, "utf8", (err, data) => {
-  if (err) {
-    console.error(chalk.red("❌ Failed to read file"), err);
-    return;
+if (mode === 'undo') {
+  if (fs.existsSync(backupPath)) {
+    fs.copyFileSync(backupPath, inputPath);
+    fs.removeSync(backupPath);
+    console.log(`🔄 Restored from backup: ${fileBase}`);
+    console.log(`🗑️ Backup deleted after undo.`);
+  } else {
+    console.log('⚠️ No backup file found.');
   }
+  process.exit(0);
+}
 
-  const lines = data.split("\n");
-  const updatedLines = [];
-  let suggestions = 0;
-
-  for (let i = 0; i < lines.length; i++) {
-    let line = lines[i];
-
-    if (/<img\b[^>]*>/.test(line) && !/alt\s*=/.test(line)) {
-      const srcMatch = line.match(/src\s*=\s*{?"([^"}]+)"/);
-      const fallback = srcMatch?.[1]?.split("/").pop()?.split(".")[0] || "image";
-
-      if (mode === "fix") {
-        line = line.replace(/<img\b/, `<img alt="${fallback}"`);
-        console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${srcMatch?.[1] || ''}">`));
-      } else {
-        updatedLines.push(`{/* Suggestion: Add alt="${fallback}" to <img src="${srcMatch?.[1] || ''}"> */}`);
-        console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img src="${srcMatch?.[1] || ''}">`));
-      }
-      suggestions++;
-    }
-
-    if (/<input\b[^>]*>/.test(line) && !/aria-label\s*=/.test(line)) {
-      if (mode === "fix") {
-        line = line.replace(/<input\b/, `<input aria-label="Input field"`);
-        console.log(chalk.green(`✔️ Added aria-label to <input>`));
-      } else {
-        updatedLines.push(`{/* Suggestion: Add aria-label="Input field" to this input */}`);
-        console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
-      }
-      suggestions++;
-    }
-
-    updatedLines.push(line);
-  }
-
-const outputFile = mode === "fix"
-  ? path.join(path.dirname(fullPath), path.basename(fullPath).replace(/\.jsx$/, "_fixed.jsx"))
-  : fullPath;
-
-  fs.writeFile(outputFile, updatedLines.join("\n"), (err) => {
-    if (err) {
-      console.error(chalk.red("❌ Error writing output file:"), err);
-    } else {
-      const status =
-        mode === "fix"
-          ? `✅ ${suggestions} issue(s) fixed.\nOutput: ${path.basename(outputFile)}`
-          : `💬 ${suggestions} suggestion(s) inserted directly into ${path.basename(outputFile)}`;
-      console.log(chalk.yellow(`\n${status}\n`));
-    }
-  });
+const code = fs.readFileSync(inputPath, 'utf-8');
+const ast = parser.parse(code, {
+  sourceType: 'module',
+  plugins: ['jsx'],
 });
+
+let fixes = 0;
+
+traverse(ast, {
+  JSXElement(path) {
+    const opening = path.node.openingElement;
+    const tag = opening.name.name;
+
+    if (tag === 'img') {
+      const hasAlt = opening.attributes.some(attr => attr.name?.name === 'alt');
+      if (!hasAlt) {
+        const srcAttr = opening.attributes.find(attr => attr.name?.name === 'src');
+        const src = srcAttr?.value?.value || 'image';
+        const fallback = src.split('/').pop()?.split('.')[0] || 'image';
+
+        if (mode === 'fix') {
+          opening.attributes.push({
+            type: 'JSXAttribute',
+            name: { type: 'JSXIdentifier', name: 'alt' },
+            value: { type: 'StringLiteral', value: fallback },
+          });
+          if (!quiet) console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${src}">`));
+        } else {
+          const comment = {
+            type: 'CommentLine',
+            value: ` Suggestion: Add alt="${fallback}" to img src="${src}" `,
+            loc: null
+          };
+          
+          if (path.node.leadingComments) {
+            path.node.leadingComments.push(comment);
+          } else {
+            path.node.leadingComments = [comment];
+          }
+          
+          if (!quiet) console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img src="${src}">`));
+        }
+
+        fixes++;
+      }
+    }
+
+    if (tag === 'input') {
+      const hasAria = opening.attributes.some(attr => attr.name?.name === 'aria-label');
+      const hasId = opening.attributes.find(attr => attr.name?.name === 'id');
+
+      if (!hasAria && !hasId) {
+        if (mode === 'fix') {
+          opening.attributes.push({
+            type: 'JSXAttribute',
+            name: { type: 'JSXIdentifier', name: 'aria-label' },
+            value: { type: 'StringLiteral', value: 'Input field' },
+          });
+          if (!quiet) console.log(chalk.green(`✔️ Added aria-label="Input field" to <input>`));
+        } else {
+          const comment = {
+            type: 'CommentLine',
+            value: ` Suggestion: Add aria-label="Input field" to input `,
+            loc: null
+          };
+          
+          if (path.node.leadingComments) {
+            path.node.leadingComments.push(comment);
+          } else {
+            path.node.leadingComments = [comment];
+          }
+          
+          if (!quiet) console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
+        }
+
+        fixes++;
+      }
+    }
+  },
+});
+
+const output = generate(ast, { 
+  comments: true,
+  compact: false,
+  retainLines: true
+}, code).code;
+fs.writeFileSync(inputPath, output);
+
+console.log(
+  chalk.yellow(
+    `\n${mode === 'fix' ? `✅ ${fixes} issue(s) fixed.` : `💬 ${fixes} suggestion(s) inserted.`}\nFile updated: ${fileBase}\n`
+  )
+);
