@@ -4,16 +4,17 @@ import inquirer from 'inquirer';
 import path from 'path';
 import { exec } from 'child_process';
 import fs from 'fs-extra';
+import { showDiff } from '../diffHelper.js'; 
 
 const backupDir = path.join(process.cwd(), 'backup');
 fs.ensureDirSync(backupDir);
+
 
 const walkFiles = (dir, extList = ['.html', '.jsx'], fileList = []) => {
   const files = fs.readdirSync(dir);
   for (const file of files) {
     const fullPath = path.join(dir, file);
     const stat = fs.statSync(fullPath);
-
     const isIgnored = fullPath.includes('node_modules') || fullPath.includes('backup');
     if (stat.isDirectory() && !isIgnored) {
       walkFiles(fullPath, extList, fileList);
@@ -25,6 +26,7 @@ const walkFiles = (dir, extList = ['.html', '.jsx'], fileList = []) => {
 };
 
 const availableFiles = walkFiles(process.cwd());
+
 if (availableFiles.length === 0) {
   console.log('❌ No .html or .jsx files found in this folder or its subfolders.');
   process.exit(1);
@@ -44,7 +46,7 @@ const { file, mode, quiet } = await inquirer.prompt([
     choices: (answers) => {
       const fileBase = path.basename(answers.file);
       const backupPath = path.join(backupDir, `${fileBase}.bak`);
-      const options = ['fix', 'suggest'];
+      const options = ['fix', 'suggest', 'diff'];
       if (fs.existsSync(backupPath)) options.push('undo');
       return options;
     },
@@ -54,32 +56,34 @@ const { file, mode, quiet } = await inquirer.prompt([
     name: 'quiet',
     message: 'Show less detail in the logs?',
     default: false,
-    when: (answers) => answers.mode !== 'undo',
+    when: (answers) => answers.mode !== 'undo' && answers.mode !== 'diff',
   },
 ]);
 
 const ext = path.extname(file);
 const quietFlag = quiet ? '--quiet' : '';
-let command;
+const fileBase = path.basename(file);
+const targetPath = path.join(process.cwd(), file);
+const backupPath = path.join(backupDir, `${fileBase}.bak`);
 
 if (mode === 'undo') {
-  const fileBase = path.basename(file);
-  const targetPath = path.join(process.cwd(), file);
-  const backupPath = path.join(backupDir, `${fileBase}.bak`);
-
   if (!fs.existsSync(backupPath)) {
     console.log('⚠️ No backup file found. Cannot undo.');
     process.exit(1);
   }
-
   fs.copyFileSync(backupPath, targetPath);
-  fs.unlinkSync(backupPath);
+  fs.removeSync(backupPath);
   console.log(`🔄 Restored from backup: ${fileBase}`);
   console.log('🗑️ Backup deleted after undo.');
   process.exit(0);
 }
 
-command =
+if (mode === 'diff') {
+  showDiff(backupPath, targetPath);
+  process.exit(0);
+}
+
+const command =
   ext === '.jsx'
     ? `node jsxProcessor.cjs "${file}" ${mode} ${quietFlag}`
     : `node index.cjs "${file}" --mode=${mode} ${quietFlag}`;

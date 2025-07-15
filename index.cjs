@@ -21,18 +21,16 @@ const backupPath = path.join(backupDir, `${fileBase}.bak`);
 
 fs.ensureDirSync(backupDir);
 
-
 if (mode !== 'undo' && !fs.existsSync(backupPath)) {
   fs.copyFileSync(inputPath, backupPath);
 }
-
 
 if (mode === 'undo') {
   if (fs.existsSync(backupPath)) {
     fs.copyFileSync(backupPath, inputPath);
     fs.removeSync(backupPath);
     console.log(`🔄 Restored from backup: ${fileBase}`);
-    console.log(`🗑️ Backup deleted after undo.`);
+    console.log('🗑️ Backup deleted after undo.');
   } else {
     console.log('⚠️ No backup file found.');
   }

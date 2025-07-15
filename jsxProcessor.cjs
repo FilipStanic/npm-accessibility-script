@@ -25,7 +25,7 @@ if (mode === 'undo') {
     fs.copyFileSync(backupPath, inputPath);
     fs.removeSync(backupPath);
     console.log(`🔄 Restored from backup: ${fileBase}`);
-    console.log(`🗑️ Backup deleted after undo.`);
+    console.log('🗑️ Backup deleted after undo.');
   } else {
     console.log('⚠️ No backup file found.');
   }
@@ -60,18 +60,7 @@ traverse(ast, {
           });
           if (!quiet) console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${src}">`));
         } else {
-          const comment = {
-            type: 'CommentLine',
-            value: ` Suggestion: Add alt="${fallback}" to img src="${src}" `,
-            loc: null
-          };
-          
-          if (path.node.leadingComments) {
-            path.node.leadingComments.push(comment);
-          } else {
-            path.node.leadingComments = [comment];
-          }
-          
+          path.addComment('leading', ` Suggestion: Add alt="${fallback}" to <img src="${src}" /> `);
           if (!quiet) console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img src="${src}">`));
         }
 
@@ -92,18 +81,7 @@ traverse(ast, {
           });
           if (!quiet) console.log(chalk.green(`✔️ Added aria-label="Input field" to <input>`));
         } else {
-          const comment = {
-            type: 'CommentLine',
-            value: ` Suggestion: Add aria-label="Input field" to input `,
-            loc: null
-          };
-          
-          if (path.node.leadingComments) {
-            path.node.leadingComments.push(comment);
-          } else {
-            path.node.leadingComments = [comment];
-          }
-          
+          path.addComment('leading', ` Suggestion: Add aria-label="Input field" to <input> `);
           if (!quiet) console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
         }
 
@@ -113,11 +91,11 @@ traverse(ast, {
   },
 });
 
-const output = generate(ast, { 
+const output = generate(ast, {
   comments: true,
   compact: false,
-  retainLines: true
-}, code).code;
+  retainLines: true,
+}).code;
 fs.writeFileSync(inputPath, output);
 
 console.log(
