@@ -1,105 +1,90 @@
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
-const babel = require('@babel/core');
+const chalk = require('chalk');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const generate = require('@babel/generator').default;
-const chalk = require('chalk');
 
-const file = process.argv[2];
-const mode = process.argv[3];
-const quiet = process.argv.includes('--quiet');
-const inputPath = path.join(process.cwd(), file);
-const fileBase = path.basename(file);
+const [file, modeArg, quietArg] = process.argv.slice(2);
+const mode = modeArg === 'fix' ? 'fix' : 'suggest';
+const quiet = quietArg === '--quiet';
+const inputPath = path.resolve(file);
+const inputFileName = path.basename(file);
 const backupDir = path.join(process.cwd(), 'backup');
-const backupPath = path.join(backupDir, `${fileBase}.bak`);
+const backupPath = path.join(backupDir, `${inputFileName}.bak`);
 
-fs.ensureDirSync(backupDir);
+// Backup if not yet present
+if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir);
+if (!fs.existsSync(backupPath)) fs.copyFileSync(inputPath, backupPath);
 
-if (mode !== 'undo' && !fs.existsSync(backupPath)) {
-  fs.copyFileSync(inputPath, backupPath);
+const code = fs.readFileSync(inputPath, 'utf8');
+
+let ast;
+try {
+  ast = parser.parse(code, {
+    sourceType: 'module',
+    plugins: ['jsx'],
+  });
+} catch (err) {
+  console.error(chalk.red('❌ Failed to parse JSX file:'), err.message);
+  process.exit(1);
 }
 
-if (mode === 'undo') {
-  if (fs.existsSync(backupPath)) {
-    fs.copyFileSync(backupPath, inputPath);
-    fs.removeSync(backupPath);
-    console.log(`🔄 Restored from backup: ${fileBase}`);
-    console.log('🗑️ Backup deleted after undo.');
-  } else {
-    console.log('⚠️ No backup file found.');
-  }
-  process.exit(0);
-}
-
-const code = fs.readFileSync(inputPath, 'utf-8');
-const ast = parser.parse(code, {
-  sourceType: 'module',
-  plugins: ['jsx'],
-});
-
-let fixes = 0;
+let changes = 0;
 
 traverse(ast, {
-  JSXElement(path) {
-    const opening = path.node.openingElement;
-    const tag = opening.name.name;
+  JSXOpeningElement(path) {
+    const tag = path.node.name.name;
 
     if (tag === 'img') {
-      const hasAlt = opening.attributes.some(attr => attr.name?.name === 'alt');
-      if (!hasAlt) {
-        const srcAttr = opening.attributes.find(attr => attr.name?.name === 'src');
-        const src = srcAttr?.value?.value || 'image';
-        const fallback = src.split('/').pop()?.split('.')[0] || 'image';
+      const hasAlt = path.node.attributes.some(attr => attr.name?.name === 'alt');
+      const srcAttr = path.node.attributes.find(attr => attr.name?.name === 'src');
+      const src = srcAttr?.value?.value || '';
+      const fallback = src.split('/').pop()?.split('.')[0] || 'image';
 
+      if (!hasAlt) {
         if (mode === 'fix') {
-          opening.attributes.push({
+          path.node.attributes.push({
             type: 'JSXAttribute',
             name: { type: 'JSXIdentifier', name: 'alt' },
-            value: { type: 'StringLiteral', value: fallback },
+            value: { type: 'StringLiteral', value: fallback }
           });
-          if (!quiet) console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${src}">`));
-        } else {
-          path.addComment('leading', ` Suggestion: Add alt="${fallback}" to <img src="${src}" /> `);
+          if (!quiet) console.log(chalk.green(`✔️ Added alt="${fallback}" to <img src="${src}">`));
+        } else if (mode === 'suggest') {
+          const comment = ` Suggestion: Add alt="${fallback}" to img src="${src}" `;
+          path.addComment('leading', comment);
           if (!quiet) console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img src="${src}">`));
         }
-
-        fixes++;
+        changes++;
       }
     }
 
     if (tag === 'input') {
-      const hasAria = opening.attributes.some(attr => attr.name?.name === 'aria-label');
-      const hasId = opening.attributes.find(attr => attr.name?.name === 'id');
-
-      if (!hasAria && !hasId) {
+      const hasLabel = path.node.attributes.some(attr => attr.name?.name === 'aria-label');
+      if (!hasLabel) {
         if (mode === 'fix') {
-          opening.attributes.push({
+          path.node.attributes.push({
             type: 'JSXAttribute',
             name: { type: 'JSXIdentifier', name: 'aria-label' },
-            value: { type: 'StringLiteral', value: 'Input field' },
+            value: { type: 'StringLiteral', value: 'Input field' }
           });
           if (!quiet) console.log(chalk.green(`✔️ Added aria-label="Input field" to <input>`));
-        } else {
-          path.addComment('leading', ` Suggestion: Add aria-label="Input field" to <input> `);
+        } else if (mode === 'suggest') {
+          const comment = ' Suggestion: Add aria-label="Input field" to input ';
+          path.addComment('leading', comment);
           if (!quiet) console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
         }
-
-        fixes++;
+        changes++;
       }
     }
-  },
+  }
 });
 
-const output = generate(ast, {
-  comments: true,
-  compact: false,
-  retainLines: true,
-}).code;
+const { code: output } = generate(ast, { comments: true }, code);
 fs.writeFileSync(inputPath, output);
 
-console.log(
-  chalk.yellow(
-    `\n${mode === 'fix' ? `✅ ${fixes} issue(s) fixed.` : `💬 ${fixes} suggestion(s) inserted.`}\nFile updated: ${fileBase}\n`
-  )
-);
+if (mode === 'fix') {
+  console.log(chalk.yellow(`\n✅ ${changes} issue(s) fixed.\nFile updated: ${file}\n`));
+} else {
+  console.log(chalk.yellow(`\n💬 ${changes} suggestion(s) inserted directly into ${file}\n`));
+}

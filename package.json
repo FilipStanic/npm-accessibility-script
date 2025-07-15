@@ -18,7 +18,8 @@
     "diff": "^8.0.2",
     "diff2html": "^3.4.52",
     "fs-extra": "^11.1.1",
-    "inquirer": "^9.2.16"
+    "inquirer": "^9.2.16",
+    "js-beautify": "^1.15.4"
   },
   "devDependencies": {
     "electron": "^37.1.0"
