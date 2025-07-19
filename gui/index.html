@@ -2,40 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>NAS Accessibility Script GUI</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>NAS GUI</title>
+  <link href="./output.css" rel="stylesheet" />
 </head>
-<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col items-center justify-start p-8 space-y-6">
-  <h1 class="text-3xl font-bold text-center">NAS Accessibility Script GUI</h1>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-10 space-y-8 border border-gray-200">
+    <h1 class="text-4xl font-bold text-center text-blue-700">NAS Accessibility Tool</h1>
 
-  <section class="w-full max-w-lg">
-    <button id="selectFileBtn" class="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 w-full">
-      📂 Choose File
-    </button>
-    <p id="selectedFileName" class="mt-4 font-semibold text-center">No file selected yet.</p>
-  </section>
+    <div class="flex flex-col items-center">
+      <button id="selectFileBtn" class="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">
+        📂 Choose File
+      </button>
+      <p id="selectedFileName" class="mt-3 text-gray-600">No file selected yet.</p>
+    </div>
 
-  <section class="flex space-x-4 items-center">
-    <label class="flex items-center space-x-2">
-      <input type="radio" name="mode" value="fix" checked class="accent-blue-600">
-      <span>Fix</span>
-    </label>
-    <label class="flex items-center space-x-2">
-      <input type="radio" name="mode" value="suggest" class="accent-blue-600">
-      <span>Suggest</span>
-    </label>
-  </section>
+    <div class="flex flex-wrap justify-center gap-6">
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" name="mode" value="fix" checked class="w-5 h-5 accent-blue-600" />
+        <span class="text-lg">Fix</span>
+      </label>
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" name="mode" value="suggest" class="w-5 h-5 accent-blue-600" />
+        <span class="text-lg">Suggest</span>
+      </label>
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" name="mode" value="diff" class="w-5 h-5 accent-blue-600" />
+        <span class="text-lg">Diff</span>
+      </label>
+      <label class="inline-flex items-center gap-2 hidden" id="undoOption">
+        <input type="radio" name="mode" value="undo" class="w-5 h-5 accent-blue-600" />
+        <span class="text-lg">Undo</span>
+      </label>
+    </div>
 
-  <section class="flex space-x-4">
-    <button id="runBtn" disabled class="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
-      🚀 Run Script
-    </button>
-    <button id="clearBtn" class="bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600">
-      🗑️ Clear
-    </button>
-  </section>
+    <div class="flex justify-center gap-6">
+      <button id="runBtn" disabled class="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 disabled:opacity-50 transition">
+        🚀 Run Script
+      </button>
+      <button id="clearBtn" class="bg-gray-500 text-white px-6 py-3 rounded-xl hover:bg-gray-600 transition">
+        🗑️ Clear
+      </button>
+    </div>
 
-  <div id="outputBox" class="w-full max-w-lg bg-gray-900 text-white p-4 rounded shadow overflow-y-auto whitespace-pre-wrap h-64">Output will appear here...</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-black text-white font-mono p-4 rounded-xl h-96 overflow-y-auto text-sm whitespace-pre-wrap" id="outputBoxLeft">
+        Output will appear here...
+      </div>
+      <div class="bg-black text-white font-mono p-4 rounded-xl h-96 overflow-y-auto text-sm whitespace-pre-wrap" id="outputBoxRight"></div>
+    </div>
+  </div>
 
   <script src="render.js"></script>
 </body>

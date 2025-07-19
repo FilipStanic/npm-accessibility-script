@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
+const fs = require('fs');
 const { exec } = require('child_process');
 
 function createWindow() {
@@ -29,23 +30,43 @@ ipcMain.handle('open-file-dialog', async () => {
 
 ipcMain.handle('run-script', async (event, { file, mode }) => {
   console.log(`[Main] Received run-script request: file=${file}, mode=${mode}`);
-  return new Promise((resolve) => {
-    const relativeFile = path.relative(process.cwd(), file);
-    const ext = path.extname(relativeFile);
-    const command = ext === '.jsx'
+
+  const relativeFile = path.relative(process.cwd(), file);
+  const ext = path.extname(relativeFile);
+  const fileBase = path.basename(relativeFile);
+  const backupPath = path.join(process.cwd(), 'backup', `${fileBase}.bak`);
+  let command = '';
+
+  if (mode === 'undo') {
+    if (!fs.existsSync(backupPath)) {
+      return '⚠️ No backup found. Cannot undo.';
+    }
+    command = `cp "${backupPath}" "${relativeFile}" && rm "${backupPath}" && echo "🔄 Restored from backup and removed backup file."`;
+  } else if (mode === 'diff') {
+    if (!fs.existsSync(backupPath)) {
+      return '⚠️ No backup file found. Cannot show diff.';
+    }
+    const diffHelperPath = path.join(__dirname, '..', 'diffHelper.js');
+    command = `node "${diffHelperPath}" "${backupPath}" "${relativeFile}"`;
+  } else {
+    command = ext === '.jsx'
       ? `node jsxProcessor.cjs "${relativeFile}" ${mode}`
       : `node index.cjs "${relativeFile}" --mode=${mode}`;
-    console.log(`[Main] Running command: ${command}`);
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        resolve(`❌ Error: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        resolve(`⚠️ STDERR: ${stderr}`);
-        return;
-      }
+  }
+
+  console.log(`[Main] Running command: ${command}`);
+  return new Promise((resolve) => {
+    exec(command, { maxBuffer: 1024 * 500 }, (error, stdout, stderr) => {
+      if (error) return resolve(`❌ Error: ${error.message}`);
+      if (stderr) return resolve(`⚠️ STDERR: ${stderr}`);
       resolve(stdout);
     });
   });
+});
+
+ipcMain.handle('check-backup', async (event, fullPath) => {
+  const fileBase = path.basename(fullPath);
+  const backupPath = path.join(process.cwd(), 'backup', `${fileBase}.bak`);
+  console.log('[Main] Checking backup:', backupPath);
+  return fs.existsSync(backupPath);
 });
