@@ -5,8 +5,8 @@ const { exec } = require('child_process');
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1300,
+    height: 850,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -21,16 +21,12 @@ app.whenReady().then(createWindow);
 ipcMain.handle('open-file-dialog', async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog({
     properties: ['openFile'],
-    filters: [
-      { name: 'HTML & JSX Files', extensions: ['html', 'jsx'] },
-    ],
+    filters: [{ name: 'HTML & JSX Files', extensions: ['html', 'jsx'] }],
   });
   return canceled ? null : filePaths[0];
 });
 
 ipcMain.handle('run-script', async (event, { file, mode }) => {
-  console.log(`[Main] Received run-script request: file=${file}, mode=${mode}`);
-
   const relativeFile = path.relative(process.cwd(), file);
   const ext = path.extname(relativeFile);
   const fileBase = path.basename(relativeFile);
@@ -54,7 +50,6 @@ ipcMain.handle('run-script', async (event, { file, mode }) => {
       : `node index.cjs "${relativeFile}" --mode=${mode}`;
   }
 
-  console.log(`[Main] Running command: ${command}`);
   return new Promise((resolve) => {
     exec(command, { maxBuffer: 1024 * 500 }, (error, stdout, stderr) => {
       if (error) return resolve(`❌ Error: ${error.message}`);
@@ -67,6 +62,5 @@ ipcMain.handle('run-script', async (event, { file, mode }) => {
 ipcMain.handle('check-backup', async (event, fullPath) => {
   const fileBase = path.basename(fullPath);
   const backupPath = path.join(process.cwd(), 'backup', `${fileBase}.bak`);
-  console.log('[Main] Checking backup:', backupPath);
   return fs.existsSync(backupPath);
 });
