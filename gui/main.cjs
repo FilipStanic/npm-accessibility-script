@@ -14,8 +14,6 @@ function createWindow() {
 
   win.loadFile(path.join(__dirname, 'index.html'));
 
-  
-  win.webContents.openDevTools({ mode: 'detach' });
 }
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';

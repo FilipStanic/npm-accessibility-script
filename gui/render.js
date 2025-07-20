@@ -22,6 +22,7 @@ selectFileBtn.addEventListener('click', async () => {
     runBtn.disabled = false;
     diffLabel?.classList.add('hidden');
     undoOption.classList.add('hidden');
+
     modeToggles.forEach(el => el.classList.remove('hidden'));
     document.querySelector('input[value="fix"]').checked = true;
   }
@@ -47,40 +48,42 @@ runBtn.addEventListener('click', async () => {
   outputBoxRight.classList.add('hidden');
 
   const result = await window.electronAPI.runScript({ file: selectedFilePath, mode });
+  console.log('Raw result from runScript:', result);
 
   if (mode === 'diff') {
+    outputBoxRight.classList.remove('hidden');
+
     const lines = result.split('\n');
 
-    const leftLines = [];
-    const rightLines = [];
+    const leftRendered = [];
+    const rightRendered = [];
 
-    for (let line of lines) {
+    lines.forEach(line => {
       if (line.startsWith('-')) {
-        leftLines.push(`<div class="text-red-400">${line.slice(1)}</div>`);
-        rightLines.push(`<div class="text-white">${line.slice(1)}</div>`);
+        leftRendered.push(`<div class="text-red-400">${line.slice(1)}</div>`);
+        rightRendered.push(`<div class="text-white"></div>`);
       } else if (line.startsWith('+')) {
-        leftLines.push(`<div class="text-white">${line.slice(1)}</div>`);
-        rightLines.push(`<div class="text-green-400">${line.slice(1)}</div>`);
+        leftRendered.push(`<div class="text-white"></div>`);
+        rightRendered.push(`<div class="text-green-400">${line.slice(1)}</div>`);
       } else {
-        leftLines.push(`<div class="text-white">${line}</div>`);
-        rightLines.push(`<div class="text-white">${line}</div>`);
+        leftRendered.push(`<div class="text-white">${line}</div>`);
+        rightRendered.push(`<div class="text-white">${line}</div>`);
       }
+    });
+
+    outputBoxLeft.innerHTML = leftRendered.join('');
+    outputBoxRight.innerHTML = rightRendered.join('');
+  } else {
+    outputBoxLeft.textContent = result;
+
+    const hasBackup = await window.electronAPI.checkBackup(selectedFilePath);
+
+    if (mode === 'fix') {
+      diffLabel?.classList.remove('hidden');
+    } else {
+      diffLabel?.classList.add('hidden');
     }
 
-    outputBoxLeft.innerHTML = leftLines.join('') || '<span class="text-gray-500">No removed content.</span>';
-    outputBoxRight.innerHTML = rightLines.join('') || '<span class="text-gray-500">No added content.</span>';
-    outputBoxRight.classList.remove('hidden');
-    return;
-  }
-
-  
-  outputBoxLeft.textContent = result;
-  const hasBackup = await window.electronAPI.checkBackup(selectedFilePath);
-  undoOption.classList.toggle('hidden', !hasBackup);
-
-  if (mode === 'fix') {
-    diffLabel?.classList.remove('hidden');
-  } else {
-    diffLabel?.classList.add('hidden');
+    undoOption.classList.toggle('hidden', !hasBackup);
   }
 });
