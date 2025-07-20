@@ -1,63 +1,90 @@
+const selectFileBtn = document.getElementById('selectFileBtn');
+const selectedFileNameElem = document.getElementById('selectedFileName');
+const runBtn = document.getElementById('runBtn');
+const clearBtn = document.getElementById('clearBtn');
+const outputBoxLeft = document.getElementById('outputBoxLeft');
+const outputBoxRight = document.getElementById('outputBoxRight');
+const undoOption = document.getElementById('undoOption');
+const diffLabel = document.getElementById('diffLabel');
+const modeToggles = document.querySelectorAll('.mode-toggle');
+
+let selectedFilePath = '';
+
+selectFileBtn.addEventListener('click', async () => {
+  const result = await window.electronAPI.openFileDialog();
+  if (result) {
+    selectedFilePath = result;
+    const fileName = result.split(/[/\\]/).pop();
+    selectedFileNameElem.textContent = `Selected file: ${fileName}`;
+    outputBoxLeft.innerHTML = '<span class="text-gray-400">Output will appear here...</span>';
+    outputBoxRight.innerHTML = '';
+    outputBoxRight.classList.add('hidden');
+    runBtn.disabled = false;
+    diffLabel.classList.add('hidden');
+    undoOption.classList.add('hidden');
+
+    modeToggles.forEach(el => el.classList.remove('hidden'));
+    document.querySelector('input[value="fix"]').checked = true;
+  }
+});
+
+clearBtn.addEventListener('click', () => {
+  selectedFilePath = '';
+  selectedFileNameElem.textContent = 'No file selected yet.';
+  outputBoxLeft.innerHTML = '<span class="text-gray-400">Output will appear here...</span>';
+  outputBoxRight.innerHTML = '';
+  outputBoxRight.classList.add('hidden');
+  runBtn.disabled = true;
+  diffLabel.classList.add('hidden');
+  undoOption.classList.add('hidden');
+});
+
 runBtn.addEventListener('click', async () => {
   if (!selectedFilePath) return alert('Please select a file first.');
   const mode = document.querySelector('input[name="mode"]:checked').value;
 
-  outputBoxLeft.innerHTML = '<p class="text-gray-400">Running...</p>';
+  outputBoxLeft.innerHTML = '<span class="text-gray-400">Running...</span>';
   outputBoxRight.innerHTML = '';
   outputBoxRight.classList.add('hidden');
 
   const result = await window.electronAPI.runScript({ file: selectedFilePath, mode });
 
   if (mode === 'diff') {
-    const lines = result.split('\n');
-    const leftLines = [];
-    const rightLines = [];
+    const [original, modified] = result.split(/^@@.*?@@$/m); 
 
-    lines.forEach(line => {
-      if (line.startsWith('-')) {
-        leftLines.push(`<div class="text-red-400"><code>${line.slice(1)}</code></div>`);
-        rightLines.push(`<div><code></code></div>`);
-      } else if (line.startsWith('+')) {
-        leftLines.push(`<div><code></code></div>`);
-        rightLines.push(`<div class="text-green-400"><code>${line.slice(1)}</code></div>`);
-      } else if (line.startsWith('@@') || line.startsWith('diff') || line.startsWith('---') || line.startsWith('+++')) {
-        
-      } else {
-        leftLines.push(`<div class="text-white"><code>${line}</code></div>`);
-        rightLines.push(`<div class="text-white"><code>${line}</code></div>`);
-      }
-    });
-
-    outputBoxLeft.innerHTML = `<div class="overflow-auto max-h-[600px] px-4">${leftLines.join('')}</div>`;
-    outputBoxRight.innerHTML = `<div class="overflow-auto max-h-[600px] px-4">${rightLines.join('')}</div>`;
-
+    outputBoxLeft.innerHTML = `<pre class="text-white">${original.trim().replace(/</g, '&lt;')}</pre>`;
+    outputBoxRight.innerHTML = `<pre class="text-green-400">${modified.trim().replace(/</g, '&lt;')}</pre>`;
     outputBoxRight.classList.remove('hidden');
-    outputBoxLeft.classList.remove('hidden');
-
-    
-    const leftScroll = outputBoxLeft.querySelector('div');
-    const rightScroll = outputBoxRight.querySelector('div');
-    if (leftScroll && rightScroll) {
-      leftScroll.addEventListener('scroll', () => {
-        rightScroll.scrollTop = leftScroll.scrollTop;
-      });
-      rightScroll.addEventListener('scroll', () => {
-        leftScroll.scrollTop = rightScroll.scrollTop;
-      });
-    }
-
+    syncScrolling(outputBoxLeft, outputBoxRight);
   } else {
-    outputBoxLeft.innerText = result;
-    outputBoxRight.innerHTML = '';
-    outputBoxRight.classList.add('hidden');
+    outputBoxLeft.textContent = result;
+  }
 
-    const hasBackup = await window.electronAPI.checkBackup(selectedFilePath);
-    if (mode === 'fix') {
-      diffLabel.classList.remove('hidden');
-    } else {
-      diffLabel.classList.add('hidden');
-    }
+  const hasBackup = await window.electronAPI.checkBackup(selectedFilePath);
+  undoOption.classList.toggle('hidden', !hasBackup);
 
-    undoOption.classList.toggle('hidden', !hasBackup);
+  if (mode === 'fix') {
+    diffLabel.classList.remove('hidden');
+  } else {
+    diffLabel.classList.add('hidden');
   }
 });
+
+
+function syncScrolling(left, right) {
+  let active = false;
+  left.addEventListener('scroll', () => {
+    if (!active) {
+      active = true;
+      right.scrollTop = left.scrollTop;
+      active = false;
+    }
+  });
+  right.addEventListener('scroll', () => {
+    if (!active) {
+      active = true;
+      left.scrollTop = right.scrollTop;
+      active = false;
+    }
+  });
+}
