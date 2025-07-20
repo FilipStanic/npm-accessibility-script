@@ -13,10 +13,14 @@ function createWindow() {
   });
 
   win.loadFile(path.join(__dirname, 'index.html'));
+
+  
+  win.webContents.openDevTools({ mode: 'detach' });
 }
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 app.whenReady().then(createWindow);
+
 
 ipcMain.handle('open-file-dialog', async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog({
@@ -25,6 +29,7 @@ ipcMain.handle('open-file-dialog', async () => {
   });
   return canceled ? null : filePaths[0];
 });
+
 
 ipcMain.handle('run-script', async (event, { file, mode }) => {
   const relativeFile = path.relative(process.cwd(), file);
@@ -38,13 +43,18 @@ ipcMain.handle('run-script', async (event, { file, mode }) => {
       return '⚠️ No backup found. Cannot undo.';
     }
     command = `cp "${backupPath}" "${relativeFile}" && rm "${backupPath}" && echo "🔄 Restored from backup and removed backup file."`;
-  } else if (mode === 'diff') {
+  }
+
+  else if (mode === 'diff') {
     if (!fs.existsSync(backupPath)) {
       return '⚠️ No backup file found. Cannot show diff.';
     }
+
     const diffHelperPath = path.join(__dirname, '..', 'diffHelper.js');
     command = `node "${diffHelperPath}" "${backupPath}" "${relativeFile}"`;
-  } else {
+  }
+
+  else {
     command = ext === '.jsx'
       ? `node jsxProcessor.cjs "${relativeFile}" ${mode}`
       : `node index.cjs "${relativeFile}" --mode=${mode}`;
@@ -58,6 +68,7 @@ ipcMain.handle('run-script', async (event, { file, mode }) => {
     });
   });
 });
+
 
 ipcMain.handle('check-backup', async (event, fullPath) => {
   const fileBase = path.basename(fullPath);
