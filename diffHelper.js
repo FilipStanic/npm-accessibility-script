@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { createTwoFilesPatch } from 'diff';
 import chalk from 'chalk';
-import Diff2Html from 'diff2html'; // ✅ Correct way to import from CommonJS
+import Diff2Html from 'diff2html';
 
 export function showDiff(originalPath, modifiedPath) {
   if (!fs.existsSync(originalPath)) {

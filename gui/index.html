@@ -1,57 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>NAS GUI</title>
-  <link href="./output.css" rel="stylesheet" />
-</head>
-<body class="select-none bg-gray-50 text-gray-800 min-h-screen flex items-center justify-center p-6">
-  <div class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-10 space-y-8 border border-gray-200">
-    <h1 class="text-4xl font-bold text-center text-blue-700">NAS Accessibility Tool</h1>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>NAS GUI</title>
+    <link href="./output.css" rel="stylesheet" />
+  </head>
+  <body class="select-none bg-gray-50 text-gray-800 min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-10 space-y-8 border border-gray-200">
+      <h1 class="text-4xl font-bold text-center text-blue-700">NAS Accessibility Tool</h1>
 
-    <div class="flex flex-col items-center">
-      <button id="selectFileBtn" class="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">
-        📂 Choose File
-      </button>
-      <p id="selectedFileName" class="mt-3 text-gray-600">No file selected yet.</p>
-    </div>
-
-    <div class="flex flex-wrap justify-center gap-6">
-      <label class="inline-flex items-center gap-2 mode-toggle">
-        <input type="radio" name="mode" value="fix" checked class="w-5 h-5 accent-blue-600" />
-        <span class="text-lg">Fix</span>
-      </label>
-      <label class="inline-flex items-center gap-2 mode-toggle">
-        <input type="radio" name="mode" value="suggest" class="w-5 h-5 accent-blue-600" />
-        <span class="text-lg">Suggest</span>
-      </label>
-      <label class="inline-flex items-center gap-2 mode-toggle hidden" id="diffLabel">
-        <input type="radio" name="mode" value="diff" class="w-5 h-5 accent-blue-600" />
-        <span class="text-lg">Diff</span>
-      </label>
-      <label class="inline-flex items-center gap-2 hidden" id="undoOption">
-        <input type="radio" name="mode" value="undo" class="w-5 h-5 accent-blue-600" />
-        <span class="text-lg">Undo</span>
-      </label>
-    </div>
-
-    <div class="flex justify-center gap-6">
-      <button id="runBtn" disabled class="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 disabled:opacity-50 transition">
-        🚀 Run Script
-      </button>
-      <button id="clearBtn" class="bg-gray-500 text-white px-6 py-3 rounded-xl hover:bg-gray-600 transition">
-        🗑️ Clear
-      </button>
-    </div>
-
-    <div id="outputWrapper" class="flex justify-center md:justify-between gap-6">
-      <div id="outputBoxLeft" class="select-text bg-gray-900 text-white font-mono p-4 rounded-xl h-96 overflow-y-auto text-sm whitespace-pre-wrap border border-gray-700 shadow-inner w-full md:w-1/2">
-        <span class="text-gray-400">Output will appear here...</span>
+      <div class="flex flex-col items-center">
+        <button id="selectFileBtn" class="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">
+          📂 Choose File
+        </button>
+        <p id="selectedFileName" class="mt-3 text-gray-600">No file selected yet.</p>
       </div>
-      <div id="outputBoxRight" class="hidden select-text bg-gray-900 text-white font-mono p-4 rounded-xl h-96 overflow-y-auto text-sm whitespace-pre-wrap border border-gray-700 shadow-inner w-full md:w-1/2">
+
+      <div class="flex flex-wrap justify-center gap-6">
+        <label class="inline-flex items-center gap-2 mode-toggle">
+          <input type="radio" name="mode" value="fix" checked class="w-5 h-5 accent-blue-600" />
+          <span class="text-lg">Fix</span>
+        </label>
+        <label class="inline-flex items-center gap-2 mode-toggle">
+          <input type="radio" name="mode" value="suggest" class="w-5 h-5 accent-blue-600" />
+          <span class="text-lg">Suggest</span>
+        </label>
+        <label class="inline-flex items-center gap-2 mode-toggle hidden" id="diffLabel">
+          <input type="radio" name="mode" value="diff" class="w-5 h-5 accent-blue-600" />
+          <span class="text-lg">Diff</span>
+        </label>
+        <label class="inline-flex items-center gap-2 hidden" id="undoOption">
+          <input type="radio" name="mode" value="undo" class="w-5 h-5 accent-blue-600" />
+          <span class="text-lg">Undo</span>
+        </label>
+      </div>
+
+      <div class="flex justify-center gap-6">
+        <button id="runBtn" disabled class="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 disabled:opacity-50 transition">
+          🚀 Run Script
+        </button>
+        <button id="clearBtn" class="bg-gray-500 text-white px-6 py-3 rounded-xl hover:bg-gray-600 transition">
+          🗑️ Clear
+        </button>
+      </div>
+
+      <div id="outputWrapper" class="flex justify-center md:justify-between gap-6">
+        <div id="outputBoxLeft" class="select-text bg-gray-900 text-white font-mono p-4 rounded-xl h-96 overflow-y-auto text-sm whitespace-pre-wrap border border-gray-700 shadow-inner w-full md:w-1/2">
+          <span class="text-gray-400">Output will appear here...</span>
+        </div>
+        <div id="outputBoxRight" class="hidden select-text bg-gray-900 text-white font-mono p-4 rounded-xl h-96 overflow-y-auto text-sm whitespace-pre-wrap border border-gray-700 shadow-inner w-full md:w-1/2">
+        </div>
       </div>
     </div>
-  </div>
-  <script src="render.js"></script>
-</body>
-</html>
+    <script src="render.js"></script>
+  </body>
+  </html>

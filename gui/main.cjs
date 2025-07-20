@@ -48,7 +48,7 @@ ipcMain.handle('run-script', async (event, { file, mode }) => {
       return '⚠️ No backup file found. Cannot show diff.';
     }
 
-    const diffHelperPath = path.join(__dirname, '..', 'diffHelper.js');
+    const diffHelperPath = path.join(__dirname, '..', 'diffHelper.cjs');
     command = `node "${diffHelperPath}" "${backupPath}" "${relativeFile}"`;
   }
 
