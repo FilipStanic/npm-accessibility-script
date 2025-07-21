@@ -49,34 +49,31 @@ runBtn.addEventListener('click', async () => {
 
   const result = await window.electronAPI.runScript({ file: selectedFilePath, mode });
 
-  if (mode === 'diff') {
-    const lines = result.split('\n');
+if (mode === 'diff') {
+  const lines = result.split('\n');
 
-    const leftLines = [];
-    const rightLines = [];
+  const leftLines = [];
+  const rightLines = [];
 
-    lines.forEach(line => {
-      if (line.startsWith('@@')) {
-        return; // Skip metadata lines
-      }
-      if (line.startsWith('-')) {
-        leftLines.push(`<div class="text-red-400">- ${escapeHtml(line.slice(1))}</div>`);
-      } else if (line.startsWith('+')) {
-        rightLines.push(`<div class="text-green-400">+ ${escapeHtml(line.slice(1))}</div>`);
-      } else {
-        const safe = `<div class="text-white">${escapeHtml(line)}</div>`;
-        leftLines.push(safe);
-        rightLines.push(safe);
-      }
-    });
+  lines.forEach(line => {
+    if (line.startsWith('-')) {
+      leftLines.push(`<div class="text-red-400">- ${escapeHtml(line.slice(1))}</div>`);
+    } else if (line.startsWith('+')) {
+      rightLines.push(`<div class="text-green-400">+ ${escapeHtml(line.slice(1))}</div>`);
+    } else if (line.trim() !== '') {
+      const safe = `<div class="text-white">${escapeHtml(line)}</div>`;
+      leftLines.push(safe);
+      rightLines.push(safe);
+    }
+  });
 
-    outputBoxLeft.innerHTML = leftLines.join('');
-    outputBoxRight.innerHTML = rightLines.join('');
-    outputBoxRight.classList.remove('hidden');
-    syncScrolling(outputBoxLeft, outputBoxRight);
-  } else {
-    outputBoxLeft.textContent = result;
-  }
+  outputBoxLeft.innerHTML = leftLines.join('');
+  outputBoxRight.innerHTML = rightLines.join('');
+  outputBoxRight.classList.remove('hidden');
+  syncScrolling(outputBoxLeft, outputBoxRight);
+} else {
+  outputBoxLeft.textContent = result;
+}
 
   const hasBackup = await window.electronAPI.checkBackup(selectedFilePath);
   undoOption.classList.toggle('hidden', !hasBackup);
