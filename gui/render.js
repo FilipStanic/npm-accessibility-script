@@ -56,6 +56,9 @@ runBtn.addEventListener('click', async () => {
     const rightLines = [];
 
     lines.forEach(line => {
+      if (line.startsWith('@@')) {
+        return; // Skip metadata lines
+      }
       if (line.startsWith('-')) {
         leftLines.push(`<div class="text-red-400">- ${escapeHtml(line.slice(1))}</div>`);
       } else if (line.startsWith('+')) {
