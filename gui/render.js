@@ -7,6 +7,7 @@ const outputBoxRight = document.getElementById('outputBoxRight');
 const undoOption = document.getElementById('undoOption');
 const diffLabel = document.getElementById('diffLabel');
 const modeToggles = document.querySelectorAll('.mode-toggle');
+const outputWrapper = document.getElementById('outputWrapper');
 
 let selectedFilePath = '';
 
@@ -25,6 +26,8 @@ selectFileBtn.addEventListener('click', async () => {
 
     modeToggles.forEach(el => el.classList.remove('hidden'));
     document.querySelector('input[value="fix"]').checked = true;
+    outputWrapper.classList.remove('flex-row');
+    outputWrapper.classList.add('justify-center');
   }
 });
 
@@ -37,6 +40,8 @@ clearBtn.addEventListener('click', () => {
   runBtn.disabled = true;
   diffLabel.classList.add('hidden');
   undoOption.classList.add('hidden');
+  outputWrapper.classList.remove('flex-row');
+  outputWrapper.classList.add('justify-center');
 });
 
 runBtn.addEventListener('click', async () => {
@@ -46,15 +51,25 @@ runBtn.addEventListener('click', async () => {
   outputBoxLeft.innerHTML = '<span class="text-gray-400">Running...</span>';
   outputBoxRight.innerHTML = '';
   outputBoxRight.classList.add('hidden');
+  outputWrapper.classList.remove('flex-row');
+  outputWrapper.classList.add('justify-center');
 
   const result = await window.electronAPI.runScript({ file: selectedFilePath, mode });
 
   if (mode === 'diff') {
-    const [original, modified] = result.split(/^@@.*?@@$/m); 
+    const [original, modified] = result.split(/^@@.*?@@$/m);
 
-    outputBoxLeft.innerHTML = `<pre class="text-white">${original.trim().replace(/</g, '&lt;')}</pre>`;
-    outputBoxRight.innerHTML = `<pre class="text-green-400">${modified.trim().replace(/</g, '&lt;')}</pre>`;
+    const coloredLeft = highlightDiff(original.trim(), 'left');
+    const coloredRight = highlightDiff(modified.trim(), 'right');
+
+    outputBoxLeft.innerHTML = `<pre>${coloredLeft}</pre>`;
+    outputBoxRight.innerHTML = `<pre>${coloredRight}</pre>`;
+
     outputBoxRight.classList.remove('hidden');
+
+    outputWrapper.classList.remove('justify-center');
+    outputWrapper.classList.add('flex-row');
+
     syncScrolling(outputBoxLeft, outputBoxRight);
   } else {
     outputBoxLeft.textContent = result;
@@ -62,14 +77,40 @@ runBtn.addEventListener('click', async () => {
 
   const hasBackup = await window.electronAPI.checkBackup(selectedFilePath);
   undoOption.classList.toggle('hidden', !hasBackup);
-
-  if (mode === 'fix') {
-    diffLabel.classList.remove('hidden');
-  } else {
-    diffLabel.classList.add('hidden');
-  }
+  diffLabel.classList.toggle('hidden', mode !== 'fix');
 });
 
+function highlightDiff(text, side) {
+  return text
+    .split('\n')
+    .filter(line => {
+      if (side === 'left') {
+        return !line.startsWith('+') || line.startsWith('+++'); 
+      } else {
+        return !line.startsWith('-') || line.startsWith('---'); 
+      }
+    })
+    .map(line => {
+      const escaped = line.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      if (line.startsWith('+++') && side === 'right') {
+        return `<span class="text-green-400">${escaped}</span>`;
+      }
+      if (line.startsWith('---') && side === 'left') {
+        return `<span class="text-red-400">${escaped}</span>`;
+      }
+
+      if (line.startsWith('+') && side === 'right') {
+        return `<span class="text-green-400">${escaped}</span>`;
+      }
+      if (line.startsWith('-') && side === 'left') {
+        return `<span class="text-red-400">${escaped}</span>`;
+      }
+
+      return `<span class="text-white">${escaped}</span>`;
+    })
+    .join('\n');
+}
 
 function syncScrolling(left, right) {
   let active = false;
