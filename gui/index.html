@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>NAS GUI</title>
   <link href="./output.css" rel="stylesheet" />
 </head>
-<body class="select-none bg-white text-gray-800 min-h-screen w-screen h-screen flex items-center justify-center p-0 m-0">
+
+<body
+  class="select-none bg-white text-gray-800 min-h-screen w-screen h-screen flex items-center justify-center p-0 m-0">
   <div class="w-full h-full p-10 space-y-8">
     <h1 class="text-4xl font-bold text-center text-blue-700">NAS Accessibility Tool</h1>
 
@@ -36,7 +39,8 @@
     </div>
 
     <div class="flex justify-center gap-6">
-      <button id="runBtn" disabled class="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 disabled:opacity-50 transition">
+      <button id="runBtn" disabled
+        class="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 disabled:opacity-50 transition">
         🚀 Run Script
       </button>
       <button id="clearBtn" class="bg-gray-500 text-white px-6 py-3 rounded-xl hover:bg-gray-600 transition">
@@ -45,13 +49,16 @@
     </div>
 
     <div id="outputWrapper" class="flex gap-6 justify-center h-[calc(100%-400px)]">
-      <div id="outputBoxLeft" class="select-text bg-gray-900 text-white font-mono p-4 rounded-xl overflow-y-auto text-xs whitespace-pre-wrap w-full md:w-1/2 h-full">
+      <div id="outputBoxLeft"
+        class="select-text bg-gray-900 text-white font-mono p-4 rounded-xl overflow-y-auto text-xs whitespace-pre-wrap w-full md:w-1/2 h-full">
         <span class="text-gray-400">Output will appear here...</span>
       </div>
-      <div id="outputBoxRight" class="hidden select-text bg-gray-900 text-white font-mono p-4 rounded-xl overflow-y-auto text-xs whitespace-pre-wrap w-full md:w-1/2 h-full">
+      <div id="outputBoxRight"
+        class="hidden select-text bg-gray-900 text-white font-mono p-4 rounded-xl overflow-y-auto text-xs whitespace-pre-wrap w-full md:w-1/2 h-full">
       </div>
     </div>
   </div>
   <script src="render.js"></script>
 </body>
+
 </html>

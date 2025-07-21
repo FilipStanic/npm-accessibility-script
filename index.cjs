@@ -36,7 +36,7 @@ if (mode === 'undo') {
   process.exit(0);
 }
 
-// Create backup if it doesn't exist
+
 if (!fs.existsSync(backupPath)) {
   fs.copyFileSync(inputPath, backupPath);
 }
