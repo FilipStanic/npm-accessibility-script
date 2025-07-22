@@ -60,7 +60,7 @@ fs.readFile(inputPath, 'utf-8', (err, html) => {
   let fixes = 0;
 
   if (mode === 'fix') {
-    // Handle multi-line img tags with dotall flag
+    
     modifiedHtml = modifiedHtml.replace(/<img([^>]*?)>/gis, (match, attributes) => {
       if (!/\salt\s*=/i.test(attributes)) {
         const srcMatch = attributes.match(/\ssrc\s*=\s*["']([^"']*?)["']/i);
@@ -70,13 +70,13 @@ fs.readFile(inputPath, 'utf-8', (err, html) => {
         if (!quietArg) console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${src}">`));
         fixes++;
         
-        // Insert alt attribute before the closing >
+        
         return match.replace('>', ` alt="${fallback}">`);
       }
       return match;
     });
 
-    // Handle multi-line input tags with dotall flag
+    
     modifiedHtml = modifiedHtml.replace(/<input([^>]*?)>/gis, (match, attributes) => {
       if (!/\saria-label\s*=/i.test(attributes)) {
         const idMatch = attributes.match(/\sid\s*=\s*["']([^"']*?)["']/i);
@@ -86,7 +86,7 @@ fs.readFile(inputPath, 'utf-8', (err, html) => {
           if (!quietArg) console.log(chalk.green(`✔️ Added aria-label="Input field" to <input>`));
           fixes++;
           
-          // Insert aria-label before the closing > or />
+          
           if (match.endsWith('/>')) {
             return match.replace('/>', ' aria-label="Input field"/>');
           } else {
