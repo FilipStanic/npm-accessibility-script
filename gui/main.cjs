@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { exec } = require("child_process");
+const crypto = require("crypto");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -26,11 +27,20 @@ ipcMain.handle("open-file-dialog", async () => {
   return canceled ? null : filePaths[0];
 });
 
+function getUniqueBackupName(filePath) {
+  const fileName = path.basename(filePath);
+  const fileDir = path.dirname(filePath);
+  const hash = crypto.createHash('md5').update(fileDir).digest('hex').substring(0, 8);
+  const nameWithoutExt = path.parse(fileName).name;
+  const ext = path.parse(fileName).ext;
+  return `${nameWithoutExt}_${hash}${ext}.bak`;
+}
+
 ipcMain.handle("run-script", async (event, { file, mode }) => {
   const relativeFile = path.relative(process.cwd(), file);
   const ext = path.extname(relativeFile);
-  const fileBase = path.basename(relativeFile);
-  const backupPath = path.join(process.cwd(), "backup", `${fileBase}.bak`);
+  const backupFileName = getUniqueBackupName(file);
+  const backupPath = path.join(process.cwd(), "backup", backupFileName);
   let command = "";
 
   if (mode === "undo") {
@@ -61,7 +71,7 @@ ipcMain.handle("run-script", async (event, { file, mode }) => {
 });
 
 ipcMain.handle("check-backup", async (event, fullPath) => {
-  const fileBase = path.basename(fullPath);
-  const backupPath = path.join(process.cwd(), "backup", `${fileBase}.bak`);
+  const backupFileName = getUniqueBackupName(fullPath);
+  const backupPath = path.join(process.cwd(), "backup", backupFileName);
   return fs.existsSync(backupPath);
 });

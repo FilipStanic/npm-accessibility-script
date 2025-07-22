@@ -1,8 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
-const cheerio = require('cheerio');
 const chalk = require('chalk');
-const beautify = require('js-beautify').html;
+const crypto = require('crypto');
 
 const args = process.argv.slice(2);
 const fileArg = args.find(arg => arg.endsWith('.html'));
@@ -17,11 +16,21 @@ if (!fileArg) {
   process.exit(1);
 }
 
+function getUniqueBackupName(filePath) {
+  const fileName = path.basename(filePath);
+  const fileDir = path.dirname(path.resolve(filePath));
+  const hash = crypto.createHash('md5').update(fileDir).digest('hex').substring(0, 8);
+  const nameWithoutExt = path.parse(fileName).name;
+  const ext = path.parse(fileName).ext;
+  return `${nameWithoutExt}_${hash}${ext}.bak`;
+}
+
 const inputPath = path.join(process.cwd(), fileArg);
 const inputFileName = path.basename(inputPath);
 const backupDir = path.join(process.cwd(), 'backup');
 fs.ensureDirSync(backupDir);
-const backupPath = path.join(backupDir, `${inputFileName}.bak`);
+const backupFileName = getUniqueBackupName(inputPath);
+const backupPath = path.join(backupDir, backupFileName);
 
 if (mode === 'undo') {
   if (!fs.existsSync(backupPath)) {
@@ -36,9 +45,9 @@ if (mode === 'undo') {
   process.exit(0);
 }
 
-
 if (!fs.existsSync(backupPath)) {
   fs.copyFileSync(inputPath, backupPath);
+  if (!quietArg) console.log(chalk.gray(`📄 Created backup: ${backupFileName}`));
 }
 
 fs.readFile(inputPath, 'utf-8', (err, html) => {
@@ -47,52 +56,79 @@ fs.readFile(inputPath, 'utf-8', (err, html) => {
     return;
   }
 
-  const $ = cheerio.load(html, { decodeEntities: false });
+  let modifiedHtml = html;
   let fixes = 0;
 
-  $('img').each((i, el) => {
-    const img = $(el);
-    const alt = img.attr('alt');
-    const src = img.attr('src') || '';
-    const fallback = src.split('/').pop()?.split('.')[0] || 'image';
-
-    if (!alt || alt.trim() === '') {
-      if (mode === 'fix') {
-        img.attr('alt', fallback);
+  if (mode === 'fix') {
+    // Handle multi-line img tags with dotall flag
+    modifiedHtml = modifiedHtml.replace(/<img([^>]*?)>/gis, (match, attributes) => {
+      if (!/\salt\s*=/i.test(attributes)) {
+        const srcMatch = attributes.match(/\ssrc\s*=\s*["']([^"']*?)["']/i);
+        const src = srcMatch ? srcMatch[1] : '';
+        const fallback = src.split('/').pop()?.split('.')[0] || 'image';
+        
         if (!quietArg) console.log(chalk.green(`✔️ Fixed alt="${fallback}" on <img src="${src}">`));
-      } else if (mode === 'suggest') {
-        img.before(`<!-- Suggestion: Add alt="${fallback}" to <img src="${src}"> -->\n`);
+        fixes++;
+        
+        // Insert alt attribute before the closing >
+        return match.replace('>', ` alt="${fallback}">`);
+      }
+      return match;
+    });
+
+    // Handle multi-line input tags with dotall flag
+    modifiedHtml = modifiedHtml.replace(/<input([^>]*?)>/gis, (match, attributes) => {
+      if (!/\saria-label\s*=/i.test(attributes)) {
+        const idMatch = attributes.match(/\sid\s*=\s*["']([^"']*?)["']/i);
+        const hasLabel = idMatch && modifiedHtml.includes(`for="${idMatch[1]}"`);
+        
+        if (!hasLabel) {
+          if (!quietArg) console.log(chalk.green(`✔️ Added aria-label="Input field" to <input>`));
+          fixes++;
+          
+          // Insert aria-label before the closing > or />
+          if (match.endsWith('/>')) {
+            return match.replace('/>', ' aria-label="Input field"/>');
+          } else {
+            return match.replace('>', ' aria-label="Input field">');
+          }
+        }
+      }
+      return match;
+    });
+    
+  } else if (mode === 'suggest') {
+    modifiedHtml = modifiedHtml.replace(/<img([^>]*?)>/gis, (match, attributes) => {
+      if (!/\salt\s*=/i.test(attributes)) {
+        const srcMatch = attributes.match(/\ssrc\s*=\s*["']([^"']*?)["']/i);
+        const src = srcMatch ? srcMatch[1] : '';
+        const fallback = src.split('/').pop()?.split('.')[0] || 'image';
+        
         if (!quietArg) console.log(chalk.blue(`💡 Suggest alt="${fallback}" for <img src="${src}">`));
+        fixes++;
+        
+        return `<!-- Suggestion: Add alt="${fallback}" to <img src="${src}"> -->\n${match}`;
       }
-      fixes++;
-    }
-  });
+      return match;
+    });
 
-  $('input').each((i, el) => {
-    const input = $(el);
-    const hasLabel = input.attr('aria-label');
-    const id = input.attr('id');
-    const hasLabelTag = id && $(`label[for="${id}"]`).length > 0;
-
-    if (!hasLabel && !hasLabelTag) {
-      if (mode === 'fix') {
-        input.attr('aria-label', 'Input field');
-        if (!quietArg) console.log(chalk.green(`✔️ Added aria-label="Input field" to <input>`));
-      } else if (mode === 'suggest') {
-        input.before(`<!-- Suggestion: Add aria-label="Input field" to <input> -->\n`);
-        if (!quietArg) console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
+    modifiedHtml = modifiedHtml.replace(/<input([^>]*?)>/gis, (match, attributes) => {
+      if (!/\saria-label\s*=/i.test(attributes)) {
+        const idMatch = attributes.match(/\sid\s*=\s*["']([^"']*?)["']/i);
+        const hasLabel = idMatch && modifiedHtml.includes(`for="${idMatch[1]}"`);
+        
+        if (!hasLabel) {
+          if (!quietArg) console.log(chalk.blue(`💡 Suggest aria-label="Input field" for <input>`));
+          fixes++;
+          
+          return `<!-- Suggestion: Add aria-label="Input field" to <input> -->\n${match}`;
+        }
       }
-      fixes++;
-    }
-  });
+      return match;
+    });
+  }
 
-  const finalHtml = beautify($.html(), {
-    indent_size: 2,
-    preserve_newlines: true,
-    max_preserve_newlines: 2
-  });
-
-  fs.writeFile(inputPath, finalHtml, err => {
+  fs.writeFile(inputPath, modifiedHtml, err => {
     if (err) {
       console.error(chalk.red('❌ Error writing output file:'), err);
     } else {

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
+const crypto = require('crypto');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const generate = require('@babel/generator').default;
@@ -8,14 +9,27 @@ const generate = require('@babel/generator').default;
 const [file, modeArg, quietArg] = process.argv.slice(2);
 const mode = modeArg === 'fix' ? 'fix' : 'suggest';
 const quiet = quietArg === '--quiet';
+
+function getUniqueBackupName(filePath) {
+  const fileName = path.basename(filePath);
+  const fileDir = path.dirname(path.resolve(filePath));
+  const hash = crypto.createHash('md5').update(fileDir).digest('hex').substring(0, 8);
+  const nameWithoutExt = path.parse(fileName).name;
+  const ext = path.parse(fileName).ext;
+  return `${nameWithoutExt}_${hash}${ext}.bak`;
+}
+
 const inputPath = path.resolve(file);
 const inputFileName = path.basename(file);
 const backupDir = path.join(process.cwd(), 'backup');
-const backupPath = path.join(backupDir, `${inputFileName}.bak`);
+const backupFileName = getUniqueBackupName(inputPath);
+const backupPath = path.join(backupDir, backupFileName);
 
-// Backup if not yet present
 if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir);
-if (!fs.existsSync(backupPath)) fs.copyFileSync(inputPath, backupPath);
+if (!fs.existsSync(backupPath)) {
+  fs.copyFileSync(inputPath, backupPath);
+  if (!quiet) console.log(chalk.gray(`📄 Created backup: ${backupFileName}`));
+}
 
 const code = fs.readFileSync(inputPath, 'utf8');
 
