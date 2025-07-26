@@ -19,41 +19,98 @@ function getUniqueBackupName(filePath) {
   return `${nameWithoutExt}_${hash}${ext}.bak`;
 }
 
-const walkFiles = (dir, extList = ['.html', '.jsx'], fileList = []) => {
-  const files = fs.readdirSync(dir);
-  for (const file of files) {
-    const fullPath = path.join(dir, file);
-    const stat = fs.statSync(fullPath);
-    const isIgnored = fullPath.includes('node_modules') || fullPath.includes('backup');
-    if (stat.isDirectory() && !isIgnored) {
-      walkFiles(fullPath, extList, fileList);
-    } else if (!isIgnored && extList.includes(path.extname(fullPath))) {
-      fileList.push(path.relative(process.cwd(), fullPath));
-    }
+function getDirectoryContents(currentPath) {
+  const items = [];
+  
+  
+  const parentPath = path.dirname(currentPath);
+  if (parentPath !== currentPath) {
+    items.push({
+      name: '📁 .. (Go back)',
+      value: { type: 'directory', path: parentPath },
+      short: '..'
+    });
   }
-  return fileList;
-};
-
-const availableFiles = walkFiles(process.cwd());
-
-if (availableFiles.length === 0) {
-  console.log('❌ No .html or .jsx files found in this folder or its subfolders.');
-  process.exit(1);
+  
+  try {
+    const entries = fs.readdirSync(currentPath, { withFileTypes: true });
+    
+    
+    entries
+      .filter(entry => entry.isDirectory())
+      .filter(entry => !['node_modules', '.git', 'backup', 'dist', 'build', '.next'].includes(entry.name))
+      .forEach(entry => {
+        items.push({
+          name: `📁 ${entry.name}/`,
+          value: { type: 'directory', path: path.join(currentPath, entry.name) },
+          short: entry.name
+        });
+      });
+    
+    
+    entries
+      .filter(entry => entry.isFile())
+      .filter(entry => ['.html', '.jsx'].includes(path.extname(entry.name)))
+      .forEach(entry => {
+        const icon = entry.name.endsWith('.jsx') ? '⚛️' : '🌐';
+        items.push({
+          name: `${icon} ${entry.name}`,
+          value: { type: 'file', path: path.join(currentPath, entry.name) },
+          short: entry.name
+        });
+      });
+      
+  } catch (err) {
+    console.log(`❌ Cannot read directory: ${err.message}`);
+  }
+  
+  return items;
 }
 
-const { file, mode, quiet } = await inquirer.prompt([
-  {
-    type: 'list',
-    name: 'file',
-    message: '📄 Which file do you want to work with?',
-    choices: availableFiles,
-  },
+async function selectFile() {
+  let currentPath = process.cwd();
+  
+  while (true) {
+    console.clear();
+    console.log(`📂 Current folder: ${currentPath}`);
+    console.log('🔍 Navigate to find your HTML or JSX files\n');
+    
+    const items = getDirectoryContents(currentPath);
+    
+    if (items.length === 0) {
+      console.log('📭 No folders or HTML/JSX files found here.');
+      console.log('Press Enter to go back...');
+      await inquirer.prompt([{ type: 'input', name: 'continue', message: '' }]);
+      continue;
+    }
+    
+    const { selection } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'selection',
+        message: 'Choose a folder to enter or file to work with:',
+        choices: items,
+        pageSize: 15
+      }
+    ]);
+    
+    if (selection.type === 'directory') {
+      currentPath = selection.path;
+    } else if (selection.type === 'file') {
+      return path.relative(process.cwd(), selection.path);
+    }
+  }
+}
+
+const file = await selectFile();
+
+const { mode, quiet } = await inquirer.prompt([
   {
     type: 'list',
     name: 'mode',
     message: '🛠 Choose a mode:',
     choices: (answers) => {
-      const targetPath = path.join(process.cwd(), answers.file);
+      const targetPath = path.join(process.cwd(), file);
       const backupFileName = getUniqueBackupName(targetPath);
       const backupPath = path.join(backupDir, backupFileName);
       const options = ['fix', 'suggest', 'diff'];
