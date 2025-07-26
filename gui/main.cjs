@@ -53,7 +53,7 @@ ipcMain.handle("run-script", async (event, { file, mode }) => {
       return "⚠️ No backup file found. Cannot show diff.";
     }
     const guiDiffHelperPath = path.join(__dirname, "..", "guiDiffHelper.cjs");
-    command = `node "${guiDiffHelperPath}" "${backupPath}" "${relativeFile}"`;
+    command = `node "${guiDiffHelperPath}" "${backupPath}" "${file}"`;
   } else {
     command =
       ext === ".jsx"
