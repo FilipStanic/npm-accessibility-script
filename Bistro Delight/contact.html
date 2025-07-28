@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Reservations - Bistro Delight</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bistro-brown': '#8B4513',
+                        'bistro-cream': '#F5F5DC',
+                        'bistro-dark': '#2C1810'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bistro-cream">
+    <!-- Navigation -->
+    <div class="bg-bistro-dark text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <!-- Logo without alt text -->
+                    <img src="https://picsum.photos/60/60?random=logo" class="w-12 h-12 rounded-full mr-3">
+                    <span class="text-2xl font-bold"><a href="index.html">Bistro Delight</a></span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="hover:text-bistro-cream transition-colors">Home</a>
+                    <a href="menu.html" class="hover:text-bistro-cream transition-colors">Menu</a>
+                    <a href="contact.html" class="text-bistro-cream">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="bg-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-5xl font-bold text-bistro-dark mb-4">Contact Us</h1>
+            <p class="text-xl text-gray-600">We'd love to hear from you and help plan your perfect dining experience</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Reservation Form -->
+            <div class="bg-white rounded-lg shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-bistro-dark mb-6">Make a Reservation</h2>
+                
+                <form class="space-y-6">
+                    <!-- Personal Information - Missing labels -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <input type="text" placeholder="First Name" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bistro-brown focus:border-transparent">
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Last Name" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bistro-brown focus:border-transparent">
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Information - Missing labels -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <input type="email" placeholder="Email Address" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bistro-brown focus:border-transparent">
+                        </div>
+                        <div>
+                            <input type="tel" placeholder="Phone Number"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bistro-brown focus:border-transparent">
+                        </div>
+                    </div>
+                    
+                    <!-- Reservation Details - Missing labels -->
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <input type="date" required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bistro-brown focus:border-transparent">
+                        </div>
+                        <div>
+                            <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bistro-brown focus:border-transparent">
+                                <option value="">Select Time</option>
+                                <option value="17:00">5:00 PM</option>
+                                <option value="17:30">5:30 PM</option>
+                                <option value="18:00">6:00 PM</option>
+                                <option value="18:30">6:30 PM</option>
+                                <option value="19:00">7:00 PM</option>
+                                <option value="19:30">7:30 PM</option>
+                                <option value="20:00">8:00 PM</option>
+                                <option value="20:30">8:30 PM</option>
+                                <option value="21:00">9:00 PM</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bistro-brown focus:border-transparent">
+                                <option value="">Party Size</option>
+                                <option value="1">1 person</option>
+                                <option value="2">2 people</option>
+                                <option value="3">3 people</option>
+                                <option value="4">4 people</option>
+                                <option value="5">5 people</option>
+                                <option value="6">6 people</option>
+                                <option value="7">7 people</option>
+                                <option value="8">8+ people</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Special Requests - Missing label -->
+                    <div>
+                        <textarea placeholder="Special requests, dietary restrictions, or occasion details..." rows="4"
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bistro-brown focus:border-transparent"></textarea>
+                    </div>
+                    
+                    <!-- Preferences - Missing proper labeling -->
+                    <div class="space-y-3">
+                        <p class="font-semibold text-bistro-dark">Seating Preference:</p>
+                        <div class="flex flex-wrap gap-4">
+                            <!-- Radio buttons without proper labels -->
+                            <div class="flex items-center">
+                                <input type="radio" name="seating" value="indoor" class="mr-2">
+                                <span>Indoor</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" name="seating" value="outdoor" class="mr-2">
+                                <span>Outdoor Patio</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" name="seating" value="private" class="mr-2">
+                                <span>Private Dining</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" name="seating" value="no-preference" class="mr-2" checked>
+                                <span>No Preference</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button - Could use better labeling -->
+                    <button type="submit" class="w-full bg-bistro-brown hover:bg-opacity-90 text-white py-4 rounded-lg font-bold text-lg transition-colors">
+                        Confirm Reservation
+                    </button>
+                    
+                    <p class="text-sm text-gray-600 text-center">
+                        We'll confirm your reservation within 24 hours via email or phone
+                    </p>
+                </form>
+            </div>
+
+            <!-- Contact Information & Location -->
+            <div class="space-y-8">
+                <!-- Contact Details -->
+                <div class="bg-white rounded-lg shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-bistro-dark mb-6">Get in Touch</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <!-- Icon without alt text -->
+                            <img src="https://cdn-icons-png.flaticon.com/32/684/684908.png" class="w-8 h-8 mt-1">
+                            <div>
+                                <h3 class="font-semibold text-bistro-dark">Phone</h3>
+                                <p class="text-gray-600">(555) 123-4567</p>
+                                <p class="text-sm text-gray-500">Call for immediate reservations</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <!-- Icon without alt text -->
+                            <img src="https://cdn-icons-png.flaticon.com/32/732/732200.png" class="w-8 h-8 mt-1">
+                            <div>
+                                <h3 class="font-semibold text-bistro-dark">Email</h3>
+                                <p class="text-gray-600">info@bistrodelight.com</p>
+                                <p class="text-sm text-gray-500">For inquiries and group bookings</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <!-- Icon without alt text -->
+                            <img src="https://cdn-icons-png.flaticon.com/32/684/684908.png" class="w-8 h-8 mt-1">
+                            <div>
+                                <h3 class="font-semibold text-bistro-dark">Address</h3>
+                                <p class="text-gray-600">123 Culinary Street<br>Food City, FC 12345</p>
+                                <p class="text-sm text-gray-500">Downtown district, street parking available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hours -->
+                <div class="bg-white rounded-lg shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-bistro-dark mb-6">Hours of Operation</h2>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Monday</span>
+                            <span class="text-red-600">Closed</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Tuesday - Thursday</span>
+                            <span>5:00 PM - 10:00 PM</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Friday - Saturday</span>
+                            <span>5:00 PM - 11:00 PM</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold">Sunday</span>
+                            <span>4:00 PM - 9:00 PM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-bistro-cream rounded-lg">
+                        <p class="text-sm text-bistro-dark">
+                            <strong>Holiday Hours:</strong> Please call ahead during holidays as our hours may vary.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Location Image -->
+                <div class="bg-white rounded-lg shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-bistro-dark mb-6">Find Us</h2>
+                    
+                    <!-- Restaurant exterior image without alt text -->
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         class="w-full h-48 object-cover rounded-lg mb-4">
+                    
+                    <p class="text-gray-600 mb-4">
+                        Located in the heart of the downtown district, Bistro Delight is easily accessible 
+                        by public transportation and offers convenient street parking.
+                    </p>
+                    
+                    <!-- Directions button without proper context -->
+                    <button class="bg-bistro-brown text-white px-6 py-3 rounded-lg hover:bg-opacity-90">
+                        Get Directions
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Contact Options -->
+        <div class="mt-16 bg-white rounded-lg shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-bistro-dark mb-8 text-center">Other Ways to Connect</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <!-- Icon without alt text -->
+                    <img src="https://cdn-icons-png.flaticon.com/64/3782/3782270.png" class="w-16 h-16 mx-auto mb-4">
+                    <h3 class="text-xl font-bold mb-2">Private Events</h3>
+                    <p class="text-gray-600 mb-4">Planning a special celebration? Our private dining room accommodates up to 20 guests.</p>
+                    <!-- Button without context -->
+                    <button class="text-bistro-brown hover:underline font-semibold">
+                        Learn More
+                    </button>
+                </div>
+                
+                <div class="text-center">
+                    <!-- Icon without alt text -->
+                    <img src="https://cdn-icons-png.flaticon.com/64/3039/3039876.png" class="w-16 h-16 mx-auto mb-4">
+                    <h3 class="text-xl font-bold mb-2">Gift Cards</h3>
+                    <p class="text-gray-600 mb-4">Give the gift of exceptional dining with our restaurant gift cards.</p>
+                    <!-- Button without context -->
+                    <button class="text-bistro-brown hover:underline font-semibold">
+                        Purchase Online
+                    </button>
+                </div>
+                
+                <div class="text-center">
+                    <!-- Icon without alt text -->
+                    <img src="https://cdn-icons-png.flaticon.com/64/3059/3059502.png" class="w-16 h-16 mx-auto mb-4">
+                    <h3 class="text-xl font-bold mb-2">Newsletter</h3>
+                    <p class="text-gray-600 mb-4">Stay updated on seasonal menus, special events, and exclusive offers.</p>
+                    
+                    <!-- Newsletter signup form with missing labels -->
+                    <div class="mt-4">
+                        <input type="email" placeholder="Your email address" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-2">
+                        <button class="w-full bg-bistro-brown text-white py-2 rounded-lg hover:bg-opacity-90">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact Info</h3>
+                    <p class="mb-2">123 Culinary Street</p>
+                    <p class="mb-2">Food City, FC 12345</p>
+                    <p class="mb-2">(555) 123-4567</p>
+                    <p>info@bistrodelight.com</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Hours</h3>
+                    <p class="mb-2">Monday: Closed</p>
+                    <p class="mb-2">Tuesday-Thursday: 5:00 PM - 10:00 PM</p>
+                    <p class="mb-2">Friday-Saturday: 5:00 PM - 11:00 PM</p>
+                    <p>Sunday: 4:00 PM - 9:00 PM</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <!-- Social media icons without alt text -->
+                        <a href="#" class="hover:text-bistro-cream">
+                            <img src="https://cdn-icons-png.flaticon.com/32/733/733547.png" class="w-8 h-8">
+                        </a>
+                        <a href="#" class="hover:text-bistro-cream">
+                            <img src="https://cdn-icons-png.flaticon.com/32/2111/2111463.png" class="w-8 h-8">
+                        </a>
+                        <a href="#" class="hover:text-bistro-cream">
+                            <img src="https://cdn-icons-png.flaticon.com/32/733/733579.png" class="w-8 h-8">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p>&copy; 2025 Bistro Delight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

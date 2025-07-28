@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bistro Delight - Fine Dining Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bistro-brown': '#8B4513',
+                        'bistro-cream': '#F5F5DC',
+                        'bistro-dark': '#2C1810'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-white">
+    <!-- Navigation - Missing semantic nav element -->
+    <div class="bg-bistro-dark text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo without alt text -->
+                <div class="flex items-center">
+                    <img src="https://picsum.photos/60/60?random=logo" class="w-12 h-12 rounded-full mr-3" alt="60?random=logo">
+                    <span class="text-2xl font-bold"><a href="index.html">Bistro Delight</a></span>
+                </div>
+
+                <!-- Missing semantic navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="hover:text-bistro-cream transition-colors">Home</a>
+                    <a href="menu.html" class="hover:text-bistro-cream transition-colors">Menu</a>
+                    <a href="contact.html" class="hover:text-bistro-cream transition-colors">Contact</a>
+                </div>
+
+                <!-- Mobile menu button without label -->
+                <button class="md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="relative h-screen bg-cover bg-center"
+        style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center text-white px-4">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6">Bistro Delight</h1>
+                <p class="text-xl md:text-2xl mb-8">Where Culinary Art Meets Fine Dining</p>
+                <!-- Button without proper labeling -->
+                <button
+                    class="bg-bistro-brown hover:bg-opacity-90 text-white px-8 py-3 rounded-lg text-lg font-semibold transition-all">
+                    <a href="menu.html">
+                        View Menu
+                    </a>
+
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="py-16 bg-bistro-cream">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-bistro-dark mb-6">Our Story</h2>
+                    <p class="text-lg text-gray-700 mb-6">
+                        Since 1985, Bistro Delight has been the cornerstone of fine dining in our community.
+                        Our passionate chefs craft each dish with the finest ingredients, creating memorable
+                        experiences that bring people together.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        From our signature steaks to our delicate seafood preparations, every plate tells
+                        a story of dedication, creativity, and love for the culinary arts.
+                    </p>
+                    <!-- Link without context -->
+                    <a href="menu.html" class="text-bistro-brown hover:underline font-semibold">
+                        Learn More →
+                    </a>
+                </div>
+                <div>
+                    <!-- Image without alt text -->
+                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        class="rounded-lg shadow-xl w-full" alt="photo-1556909114-f6e7ad7d3136?ixlib=rb-4">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Dishes Section -->
+    <div class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-bistro-dark mb-12">Featured Dishes</h2>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Dish 1 - Missing alt text -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                        class="w-full h-48 object-cover" alt="photo-1546833999-b9f581a1996d?ixlib=rb-4">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Grilled Ribeye Steak</h3>
+                        <p class="text-gray-600 mb-4">Prime cut ribeye with garlic mashed potatoes and seasonal
+                            vegetables</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-bistro-brown">$32.95</span>
+                            <!-- Button without label -->
+                            <button class="bg-bistro-brown text-white px-4 py-2 rounded hover:bg-opacity-90">
+                                Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dish 2 - Missing alt text -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                        class="w-full h-48 object-cover" alt="photo-1574071318508-1cdbab80d002?ixlib=rb-4">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Margherita Pizza</h3>
+                        <p class="text-gray-600 mb-4">Wood-fired pizza with fresh mozzarella, basil, and San Marzano
+                            tomatoes</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-bistro-brown">$18.95</span>
+                            <!-- Button without label -->
+                            <button class="bg-bistro-brown text-white px-4 py-2 rounded hover:bg-opacity-90">
+                                Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dish 3 - Missing alt text -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                        class="w-full h-48 object-cover" alt="photo-1467003909585-2f8a72700288?ixlib=rb-4">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Pan-Seared Salmon</h3>
+                        <p class="text-gray-600 mb-4">Atlantic salmon with lemon herb butter and wild rice pilaf</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-bistro-brown">$26.95</span>
+                            <!-- Button without label -->
+                            <button class="bg-bistro-brown text-white px-4 py-2 rounded hover:bg-opacity-90">
+                                Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Section -->
+    <div class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-bistro-dark mb-12">Restaurant Gallery</h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- All gallery images missing alt text -->
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    class="w-full h-32 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow" alt="photo-1414235077428-338989a2e8c0?ixlib=rb-4">
+
+                <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    class="w-full h-32 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow" alt="photo-1600891964092-4316c288032e?ixlib=rb-4">
+
+                <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    class="w-full h-32 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow" alt="photo-1551218808-94e220e084d2?ixlib=rb-4">
+
+                <img src="https://images.unsplash.com/photo-1578474846511-04ba529f0b88?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    class="w-full h-32 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow" alt="photo-1578474846511-04ba529f0b88?ixlib=rb-4">
+
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    class="w-full h-32 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow" alt="photo-1555396273-367ea4eb4db5?ixlib=rb-4">
+
+                <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    class="w-full h-32 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow" alt="photo-1424847651672-bf20a4b0982b?ixlib=rb-4">
+
+                <img src="https://images.unsplash.com/photo-1615937657715-bc7b4b7962c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    class="w-full h-32 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow" alt="photo-1615937657715-bc7b4b7962c1?ixlib=rb-4">
+
+                <img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    class="w-full h-32 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow" alt="photo-1571997478779-2adcbbe9ab2f?ixlib=rb-4">
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Reservation Section -->
+    <div class="py-16 bg-bistro-dark text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">Ready to Dine?</h2>
+            <p class="text-xl mb-8">Make a reservation today and experience culinary excellence</p>
+
+            <!-- Quick reservation form with accessibility issues -->
+            <div class="max-w-md mx-auto">
+                <form class="space-y-4">
+                    <!-- Inputs without labels -->
+                    <input type="date" class="w-full px-4 py-3 rounded-lg text-black" aria-label="Input field">
+
+                    <select class="w-full px-4 py-3 rounded-lg text-black">
+                        <option value="">Select Time</option>
+                        <option value="5:00">5:00 PM</option>
+                        <option value="6:00">6:00 PM</option>
+                        <option value="7:00">7:00 PM</option>
+                        <option value="8:00">8:00 PM</option>
+                    </select>
+
+                    <select class="w-full px-4 py-3 rounded-lg text-black">
+                        <option value="">Party Size</option>
+                        <option value="2">2 People</option>
+                        <option value="4">4 People</option>
+                        <option value="6">6 People</option>
+                        <option value="8">8+ People</option>
+                    </select>
+
+                    <!-- Submit button without proper labeling -->
+                    <button type="submit"
+                        class="w-full bg-bistro-brown hover:bg-opacity-90 text-white py-3 rounded-lg font-semibold transition-colors">
+                        Reserve Now
+                    </button>
+                </form>
+
+                <p class="mt-4 text-bistro-cream">
+                    Or call us at <span class="font-semibold">(555) 123-4567</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact Info</h3>
+                    <p class="mb-2">123 Culinary Street</p>
+                    <p class="mb-2">Food City, FC 12345</p>
+                    <p class="mb-2">(555) 123-4567</p>
+                    <p>info@bistrodelight.com</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Hours</h3>
+                    <p class="mb-2">Monday: Closed</p>
+                    <p class="mb-2">Tuesday-Thursday: 5:00 PM - 10:00 PM</p>
+                    <p class="mb-2">Friday-Saturday: 5:00 PM - 11:00 PM</p>
+                    <p>Sunday: 4:00 PM - 9:00 PM</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <!-- Social media icons without alt text or labels -->
+                        <a href="#" class="hover:text-bistro-cream">
+                            <img src="https://cdn-icons-png.flaticon.com/32/733/733547.png" class="w-8 h-8" alt="733547">
+                        </a>
+                        <a href="#" class="hover:text-bistro-cream">
+                            <img src="https://cdn-icons-png.flaticon.com/32/2111/2111463.png" class="w-8 h-8" alt="2111463">
+                        </a>
+                        <a href="#" class="hover:text-bistro-cream">
+                            <img src="https://cdn-icons-png.flaticon.com/32/733/733579.png" class="w-8 h-8" alt="733579">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p>&copy; 2025 Bistro Delight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

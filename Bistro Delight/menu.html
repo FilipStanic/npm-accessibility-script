@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Bistro Delight</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bistro-brown': '#8B4513',
+                        'bistro-cream': '#F5F5DC',
+                        'bistro-dark': '#2C1810'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bistro-cream">
+    <!-- Navigation - Same accessibility issues as homepage -->
+    <div class="bg-bistro-dark text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <!-- Logo without alt text -->
+                    <img src="https://picsum.photos/60/60?random=logo" class="w-12 h-12 rounded-full mr-3" alt="60?random=logo">
+                    <span class="text-2xl font-bold"><a href="index.html">Bistro Delight</a></span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="hover:text-bistro-cream transition-colors">Home</a>
+                    <a href="menu.html" class="text-bistro-cream">Menu</a>
+                    <a href="contact.html" class="hover:text-bistro-cream transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="bg-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-5xl font-bold text-bistro-dark mb-4">Our Menu</h1>
+            <p class="text-xl text-gray-600">Crafted with passion, served with pride</p>
+        </div>
+    </div>
+
+    <!-- Menu Categories -->
+    <div class="container mx-auto px-4 py-12">
+        <!-- Appetizers Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-bistro-dark mb-8 text-center">Appetizers</h2>
+            
+            <div class="grid xl:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-start space-x-4">
+                        <!-- Image without alt text -->
+                        <img src="https://images.unsplash.com/photo-1541014741259-de529411b96a?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                             class="w-20 h-20 rounded-lg object-cover flex-shrink-0" alt="photo-1541014741259-de529411b96a?ixlib=rb-4">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-xl font-bold mb-2">Bruschetta Trio</h3>
+                            <p class="text-gray-600 mb-2">Three varieties: classic tomato, mushroom, and goat cheese</p>
+                            <span class="text-bistro-brown font-bold text-lg">$12.95</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-start space-x-4">
+                        <!-- Image without alt text -->
+                        <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                             class="w-20 h-20 rounded-lg object-cover flex-shrink-0" alt="photo-1599487488170-d11ec9c172f0?ixlib=rb-4">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-xl font-bold mb-2">Calamari Fritti</h3>
+                            <p class="text-gray-600 mb-2">Crispy squid rings with marinara and aioli dipping sauces</p>
+                            <span class="text-bistro-brown font-bold text-lg">$14.95</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-start space-x-4">
+                        <!-- Image without alt text -->
+                        <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                             class="w-20 h-20 rounded-lg object-cover flex-shrink-0" alt="photo-1486297678162-eb2a19b0a32d?ixlib=rb-4">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-xl font-bold mb-2">Artisan Cheese Board</h3>
+                            <p class="text-gray-600 mb-2">Artisanal selection with honeycomb and candied nuts</p>
+                            <span class="text-bistro-brown font-bold text-lg">$18.95</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-start space-x-4">
+                        <!-- Image without alt text -->
+                        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                             class="w-20 h-20 rounded-lg object-cover flex-shrink-0" alt="photo-1565958011703-44f9829ba187?ixlib=rb-4">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-xl font-bold mb-2">Stuffed Mushrooms</h3>
+                            <p class="text-gray-600 mb-2">Portobello caps filled with herbs, breadcrumbs, and parmesan</p>
+                            <span class="text-bistro-brown font-bold text-lg">$11.95</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Courses Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-bistro-dark mb-8 text-center">Main Courses</h2>
+            
+            <div class="space-y-12">
+                <!-- Steak dishes -->
+                <div>
+                    <h3 class="text-2xl font-semibold text-bistro-brown mb-6 text-center">From the Grill</h3>
+                    
+                    <div class="grid xl:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <div class="flex items-start space-x-4">
+                                <!-- Image without alt text -->
+                                <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                     class="w-24 h-24 rounded-lg object-cover flex-shrink-0" alt="photo-1546833999-b9f581a1996d?ixlib=rb-4">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-xl font-bold mb-2">Prime Ribeye</h4>
+                                    <p class="text-gray-600 mb-2">16oz dry-aged ribeye with truffle butter and roasted vegetables</p>
+                                    <span class="text-bistro-brown font-bold text-lg">$42.95</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <div class="flex items-start space-x-4">
+                                <!-- Image without alt text -->
+                                <img src="https://images.unsplash.com/photo-1558030006-450675393462?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                     class="w-24 h-24 rounded-lg object-cover flex-shrink-0" alt="photo-1558030006-450675393462?ixlib=rb-4">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-xl font-bold mb-2">Lamb Rack</h4>
+                                    <p class="text-gray-600 mb-2">Herb-crusted rack of lamb with rosemary jus and garlic mashed potatoes</p>
+                                    <span class="text-bistro-brown font-bold text-lg">$38.95</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seafood dishes -->
+                <div>
+                    <h3 class="text-2xl font-semibold text-bistro-brown mb-6 text-center">Fresh Seafood</h3>
+                    
+                    <div class="grid xl:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <div class="flex items-start space-x-4">
+                                <!-- Image without alt text -->
+                                <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                     class="w-24 h-24 rounded-lg object-cover flex-shrink-0" alt="photo-1467003909585-2f8a72700288?ixlib=rb-4">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-xl font-bold mb-2">Atlantic Salmon</h4>
+                                    <p class="text-gray-600 mb-2">Pan-seared with lemon herb butter and quinoa pilaf</p>
+                                    <span class="text-bistro-brown font-bold text-lg">$28.95</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <div class="flex items-start space-x-4">
+                                <!-- Image without alt text -->
+                                <img src="https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                                     class="w-24 h-24 rounded-lg object-cover flex-shrink-0" alt="photo-1615141982883-c7ad0e69fd62?ixlib=rb-4">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-xl font-bold mb-2">Lobster Risotto</h4>
+                                    <p class="text-gray-600 mb-2">Creamy arborio rice with fresh lobster and saffron</p>
+                                    <span class="text-bistro-brown font-bold text-lg">$34.95</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pasta Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-bistro-dark mb-8 text-center">Pasta & Vegetarian</h2>
+            
+            <div class="grid xl:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-start space-x-4">
+                        <!-- Image without alt text -->
+                        <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                             class="w-20 h-20 rounded-lg object-cover flex-shrink-0" alt="photo-1551183053-bf91a1d81141?ixlib=rb-4">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-xl font-bold mb-2">Truffle Carbonara</h3>
+                            <p class="text-gray-600 mb-2">House-made fettuccine with pancetta, egg, and black truffle</p>
+                            <span class="text-bistro-brown font-bold text-lg">$24.95</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-start space-x-4">
+                        <!-- Image without alt text -->
+                        <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" 
+                             class="w-20 h-20 rounded-lg object-cover flex-shrink-0" alt="photo-1473093295043-cdd812d0e601?ixlib=rb-4">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-xl font-bold mb-2">Eggplant Parmigiana</h3>
+                            <p class="text-gray-600 mb-2">Layers of eggplant, marinara, and fresh mozzarella</p>
+                            <span class="text-bistro-brown font-bold text-lg">$19.95</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desserts Section -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-bistro-dark mb-8 text-center">Desserts</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <!-- Image without alt text -->
+                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                         class="w-full h-32 object-cover rounded-lg mb-4" alt="photo-1578985545062-69928b1d9587?ixlib=rb-4">
+                    <h3 class="text-lg font-bold mb-2">Chocolate Lava Cake</h3>
+                    <p class="text-gray-600 text-sm mb-3">Warm chocolate cake with molten center and vanilla ice cream</p>
+                    <span class="text-bistro-brown font-bold">$9.95</span>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <!-- Image without alt text -->
+                    <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                         class="w-full h-32 object-cover rounded-lg mb-4" alt="photo-1551024506-0bccd828d307?ixlib=rb-4">
+                    <h3 class="text-lg font-bold mb-2">Tiramisu</h3>
+                    <p class="text-gray-600 text-sm mb-3">Classic Italian dessert with coffee-soaked ladyfingers</p>
+                    <span class="text-bistro-brown font-bold">$8.95</span>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+                    <!-- Image without alt text -->
+                    <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                         class="w-full h-32 object-cover rounded-lg mb-4" alt="photo-1464349095431-e9a21285b5f3?ixlib=rb-4">
+                    <h3 class="text-lg font-bold mb-2">Crème Brûlée</h3>
+                    <p class="text-gray-600 text-sm mb-3">Vanilla custard with caramelized sugar crust</p>
+                    <span class="text-bistro-brown font-bold">$7.95</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wine Selection Preview -->
+        <div class="bg-white rounded-lg shadow-xl p-8 mb-12">
+            <h2 class="text-3xl font-bold text-bistro-dark mb-6 text-center">Wine Selection</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <!-- Wine image without alt text -->
+                    <img src="https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                         class="w-full h-48 object-cover rounded-lg mb-4" alt="photo-1506377247377-2a5b3b417ebb?ixlib=rb-4">
+                    <h3 class="text-xl font-bold mb-2">Red Wines</h3>
+                    <p class="text-gray-600">Curated selection of bold reds from renowned vineyards worldwide</p>
+                </div>
+                <div>
+                    <!-- Wine image without alt text -->
+                    <img src="https://images.unsplash.com/photo-1547595628-c61a29f496f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                         class="w-full h-48 object-cover rounded-lg mb-4" alt="photo-1547595628-c61a29f496f0?ixlib=rb-4">
+                    <h3 class="text-xl font-bold mb-2">White Wines</h3>
+                    <p class="text-gray-600">Crisp and elegant whites perfect for pairing with our seafood</p>
+                </div>
+            </div>
+            
+            <!-- Wine list button without proper labeling -->
+            <div class="text-center mt-6">
+                <button class="bg-bistro-brown text-white px-6 py-3 rounded-lg hover:bg-opacity-90">
+                    View Full Wine List
+                </button>
+            </div>
+        </div>
+
+        <!-- Special Dietary Options -->
+        <div class="bg-bistro-dark text-white rounded-lg p-8">
+            <h2 class="text-3xl font-bold mb-6 text-center">Special Dietary Options</h2>
+            <div class="grid md:grid-cols-3 gap-6 text-center">
+                <div>
+                    <!-- Icon without alt text -->
+                    <img src="https://cdn-icons-png.flaticon.com/64/3198/3198473.png" class="w-12 h-12 mx-auto mb-3" alt="3198473">
+                    <h3 class="text-xl font-bold mb-2">Gluten-Free</h3>
+                    <p class="text-gray-300">Multiple gluten-free options available upon request</p>
+                </div>
+                <div>
+                    <!-- Icon without alt text -->
+                    <img src="https://cdn-icons-png.flaticon.com/64/2515/2515183.png" class="w-12 h-12 mx-auto mb-3" alt="2515183">
+                    <h3 class="text-xl font-bold mb-2">Vegetarian</h3>
+                    <p class="text-gray-300">Fresh vegetarian dishes crafted with seasonal ingredients</p>
+                </div>
+                <div>
+                    <!-- Icon without alt text -->
+                    <img src="https://cdn-icons-png.flaticon.com/64/3082/3082031.png" class="w-12 h-12 mx-auto mb-3" alt="3082031">
+                    <h3 class="text-xl font-bold mb-2">Vegan</h3>
+                    <p class="text-gray-300">Plant-based options that don't compromise on flavor</p>
+                </div>
+            </div>
+            
+            <p class="text-center mt-6 text-bistro-cream">
+                Please inform your server of any allergies or dietary restrictions
+            </p>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-bistro-brown to-bistro-dark text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-4">Ready to Experience Our Menu?</h2>
+            <p class="text-xl mb-8">Make a reservation and let us create an unforgettable dining experience for you</p>
+            
+            <!-- Form with accessibility issues -->
+            <div class="max-w-lg mx-auto">
+                <div class="flex gap-4">
+                    <!-- Input without label -->
+                    <input type="email" placeholder="Enter your email for special offers" 
+                           class="flex-1 px-4 py-3 rounded-lg text-black" aria-label="Input field">
+                    <!-- Button without proper labeling -->
+                    <button class="bg-white text-bistro-brown px-6 py-3 rounded-lg font-bold hover:bg-gray-100">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <a href="contact.html" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-bistro-brown transition-colors inline-block">
+                    Make Reservation
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer - Same as homepage -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact Info</h3>
+                    <p class="mb-2">123 Culinary Street</p>
+                    <p class="mb-2">Food City, FC 12345</p>
+                    <p class="mb-2">(555) 123-4567</p>
+                    <p>info@bistrodelight.com</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Hours</h3>
+                    <p class="mb-2">Monday: Closed</p>
+                    <p class="mb-2">Tuesday-Thursday: 5:00 PM - 10:00 PM</p>
+                    <p class="mb-2">Friday-Saturday: 5:00 PM - 11:00 PM</p>
+                    <p>Sunday: 4:00 PM - 9:00 PM</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <!-- Social media icons without alt text -->
+                        <a href="#" class="hover:text-bistro-cream">
+                            <img src="https://cdn-icons-png.flaticon.com/32/733/733547.png" class="w-8 h-8" alt="733547">
+                        </a>
+                        <a href="#" class="hover:text-bistro-cream">
+                            <img src="https://cdn-icons-png.flaticon.com/32/2111/2111463.png" class="w-8 h-8" alt="2111463">
+                        </a>
+                        <a href="#" class="hover:text-bistro-cream">
+                            <img src="https://cdn-icons-png.flaticon.com/32/733/733579.png" class="w-8 h-8" alt="733579">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p>&copy; 2025 Bistro Delight. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
