@@ -123,8 +123,3 @@ Testing on the Bistro Delight website showed:
 - **Unique Naming**: Backups use MD5 hashes to prevent conflicts
 - **Easy Undo**: Restore original files with one command
 - **Non-Destructive Suggest Mode**: Comments only, no code changes
-
-## 🎯 Technical Details
-
-### HTML Processing
-Uses regex patterns to iden
