@@ -108,11 +108,6 @@ The project includes a test website called "Bistro Delight" with intentional acc
 - **Menu** (`Bistro Delight/menu.html`): Food images without alt text
 - **Contact** (`Bistro Delight/contact.html`): Forms with missing labels
 
-Test the tool on these files to see it in action:
-```bash
-npm run nas
-# Navigate to Bistro Delight folder and select any HTML file
-```
 
 ## 📊 Results
 
