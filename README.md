@@ -9,7 +9,7 @@ An automated tool for identifying and fixing common web accessibility issues in 
 - **File Support**: Works with both HTML and JSX files
 - **Safe Operations**: Automatic backup system with undo functionality
 - **Visual Diff**: Compare original and modified files side-by-side
-- **Cross-Platform**: Works on Windows, macOS, and Linux
+- **Cross-Platform**: Works on Windows, macOS and Linux
 
 ## 📋 What It Fixes
 
